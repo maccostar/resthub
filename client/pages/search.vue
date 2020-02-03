@@ -11,14 +11,14 @@
       />
       <div class="search-result-header">
         <div class="number-of-hits"><span>345</span> apis found</div>
-        <Pagination />
+        <Pagination :num="apilist.length" />
       </div>
       <div class="search-result-body">
         <div v-for="(api, index) in apilist" :key="index" class="card-wrapper">
           <Card :api="api" />
         </div>
       </div>
-      <Pagination />
+      <Pagination :num="apilist.length" />
     </div>
   </div>
 </template>
