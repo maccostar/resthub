@@ -11,14 +11,18 @@
       />
       <div class="search-result-header">
         <div class="number-of-hits"><span>345</span> apis found</div>
-        <Pagination :num="apilist.length" />
+        <Pagination :num="apilist.length" @input="onReceivePage" />
       </div>
       <div class="search-result-body">
-        <div v-for="(api, index) in apilist" :key="index" class="card-wrapper">
+        <div
+          v-for="(api, index) in apilist.slice(pageNumber, 11)"
+          :key="index"
+          class="card-wrapper"
+        >
           <Card :api="api" />
         </div>
       </div>
-      <Pagination :num="apilist.length" />
+      <Pagination :num="apilist.length" @input="onReceivePage" />
     </div>
   </div>
 </template>
@@ -40,12 +44,17 @@ import SideBar from '~/components/SideBar.vue'
 })
 export default class extends Vue {
   apilist: Api[] = []
+  pageNumber: Number = 1
 
   get uniqueCategories() {
     return this.apilist
       .map((api) => api.category)
       .flat()
       .filter((element, index, array) => array.indexOf(element) === index)
+  }
+
+  onReceivePage(page: number) {
+    this.pageNumber = page
   }
 }
 </script>
