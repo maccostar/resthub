@@ -15,7 +15,10 @@
       </div>
       <div class="search-result-body">
         <div
-          v-for="(api, index) in apilist.slice(pageNumber, 11)"
+          v-for="(api, index) in apilist.slice(
+            pageItemNumber * pageNumber - pageItemNumber,
+            pageItemNumber * pageNumber
+          )"
           :key="index"
           class="card-wrapper"
         >
@@ -44,6 +47,7 @@ import SideBar from '~/components/SideBar.vue'
 })
 export default class extends Vue {
   apilist: Api[] = []
+  pageItemNumber: Number = 11
   pageNumber: Number = 1
 
   get uniqueCategories() {

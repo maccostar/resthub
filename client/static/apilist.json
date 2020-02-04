@@ -45,7 +45,7 @@
     "icon": "/dummy.png"
   },
   {
-    "apiName": "test5 API",
+    "apiName": "test6 API",
     "owner": "EEE.Inc",
     "discription": "apis description will be appear here",
     "category": ["example2", "example5", "example8"],
@@ -54,7 +54,7 @@
     "icon": "/amazon.jpg"
   },
   {
-    "apiName": "test5 API",
+    "apiName": "test7 API",
     "owner": "EEE.Inc",
     "discription": "apis description will be appear here",
     "category": ["example2", "example5", "example8"],
@@ -63,7 +63,7 @@
     "icon": "/amazon.jpg"
   },
   {
-    "apiName": "test5 API",
+    "apiName": "test8 API",
     "owner": "EEE.Inc",
     "discription": "apis description will be appear here",
     "category": ["example2", "example5", "example8"],
@@ -72,7 +72,7 @@
     "icon": "/amazon.jpg"
   },
   {
-    "apiName": "test5 API",
+    "apiName": "test9 API",
     "owner": "EEE.Inc",
     "discription": "apis description will be appear here",
     "category": ["example2", "example5", "example8"],
@@ -81,7 +81,7 @@
     "icon": "/amazon.jpg"
   },
   {
-    "apiName": "test5 API",
+    "apiName": "test10 API",
     "owner": "EEE.Inc",
     "discription": "apis description will be appear here",
     "category": ["example2", "example5", "example8"],
@@ -90,7 +90,7 @@
     "icon": "/amazon.jpg"
   },
   {
-    "apiName": "test5 API",
+    "apiName": "test11 API",
     "owner": "EEE.Inc",
     "discription": "apis description will be appear here",
     "category": ["example2", "example5", "example8"],
@@ -99,7 +99,7 @@
     "icon": "/amazon.jpg"
   },
   {
-    "apiName": "test5 API",
+    "apiName": "test12 API",
     "owner": "EEE.Inc",
     "discription": "apis description will be appear here",
     "category": ["example2", "example5", "example8"],
@@ -108,7 +108,7 @@
     "icon": "/amazon.jpg"
   },
   {
-    "apiName": "test5 API",
+    "apiName": "test13 API",
     "owner": "EEE.Inc",
     "discription": "apis description will be appear here",
     "category": ["example2", "example5", "example8"],
@@ -117,7 +117,7 @@
     "icon": "/amazon.jpg"
   },
   {
-    "apiName": "test5 API",
+    "apiName": "test14 API",
     "owner": "EEE.Inc",
     "discription": "apis description will be appear here",
     "category": ["example2", "example5", "example8"],
@@ -126,7 +126,7 @@
     "icon": "/amazon.jpg"
   },
   {
-    "apiName": "test5 API",
+    "apiName": "test15 API",
     "owner": "EEE.Inc",
     "discription": "apis description will be appear here",
     "category": ["example2", "example5", "example8"],
