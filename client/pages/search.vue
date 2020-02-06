@@ -11,7 +11,11 @@
       />
       <div class="search-result-header">
         <div class="number-of-hits"><span>345</span> apis found</div>
-        <Pagination :num="apilist.length" @input="onReceivePage" />
+        <Pagination
+          :num="apilist.length"
+          :page="pageNumber"
+          @input="onReceivePage"
+        />
       </div>
       <div class="search-result-body">
         <div
@@ -25,7 +29,11 @@
           <Card :api="api" />
         </div>
       </div>
-      <Pagination :num="apilist.length" @input="onReceivePage" />
+      <Pagination
+        :num="apilist.length"
+        :page="pageNumber"
+        @input="onReceivePage"
+      />
     </div>
   </div>
 </template>

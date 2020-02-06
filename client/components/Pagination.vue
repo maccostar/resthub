@@ -14,11 +14,11 @@ import { Component, Vue, Prop } from 'nuxt-property-decorator'
 
 @Component({})
 export default class extends Vue {
-  page = 1
   getNumber() {
     this.$emit('input', this.page)
   }
 
-  @Prop({ type: Number, required: true }) num!: Number
+  @Prop({ type: Number, required: true }) num!: number
+  @Prop({ type: Number, required: true }) page!: number
 }
 </script>
