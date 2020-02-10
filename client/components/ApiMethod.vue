@@ -72,7 +72,6 @@
       </div>
       <div v-if="existsKey(flatPathsObj.opeObj, 'responses')">
         <h6>Responses</h6>
-        {{ arrOfResponse }}
         <table>
           <tr>
             <th style="width: 30%;">StatusCode</th>
