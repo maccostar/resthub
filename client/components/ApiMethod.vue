@@ -74,8 +74,8 @@
         <h6>Responses</h6>
         <table>
           <tr>
-            <th style="width: 30%;">StatusCode</th>
-            <th style="width: 70%;">Description</th>
+            <th style="width: 20%;">StatusCode</th>
+            <th style="width: 80%;">Description</th>
           </tr>
           <tr v-for="(response, index) in arrOfResponse" :key="index">
             <td>

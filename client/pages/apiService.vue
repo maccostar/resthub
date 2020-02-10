@@ -79,11 +79,15 @@ export default {
         // DQ means DoubleQuotation
         const idxOf2ndDQ = str.indexOf(`"`, 1)
         const refObj = str.slice(1, idxOf2ndDQ).split('/')
+        const refPath = `"refPath":"#/${refObj[1]}/${refObj[2]}/${refObj[3]}", `
         const repStr =
+          refPath +
           JSON.stringify(this.apiDoc[refObj[1]][refObj[2]][refObj[3]]).slice(
             1,
             -1
-          ) + str.slice(idxOf2ndDQ + 1)
+          ) +
+          str.slice(idxOf2ndDQ + 1)
+
         return repStr
       }
       const replacedObj = (obj) => {
