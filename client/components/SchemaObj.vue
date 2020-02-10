@@ -1,36 +1,25 @@
 <template>
   <div class="schema-container">
-    <div v-if="isArray(schemaObj.type)">
-      [
-    </div>
-    <div>
-      <p>{</p>
-      <table style="width: 100%;" class="nest">
-        <tbody>
-          <tr v-for="(object, index) in objectsToShow" :key="index">
-            <td style="width: 80px;">
-              "{{ object.name }}"
-              <span
-                v-if="object.required"
-                style="margin: 0; font-size: 10px; color: #f00;"
-              >
-                *
-              </span>
-            </td>
-            <td style="width: 5px;">:</td>
-            <td style="width: calc( 100% - 85px );">
-              <div v-if="object.type !== 'undefined'">"{{ object.type }}"</div>
-              <div v-if="object.hasNest && !object.hasOf">
-                <div class="nest">
-                  <schema-obj :schema-obj="object.schemaObj" />
-                </div>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <p>}</p>
-    </div>
+    <div v-if="isArray(schemaObj.type)">[</div>
+    <p>{</p>
+    <table style="width: 100%;" class="nest">
+      <tbody>
+        <tr v-for="(obj, index) in objectsToShow" :key="index">
+          <td style="width: 90px;">
+            "{{ obj.name }}"
+            <span v-if="obj.required" class="required"> * </span>
+          </td>
+          <td style="width: 5px;">:</td>
+          <td style="width: calc(100% - 95px);">
+            <div v-if="!obj.hasNest">"{{ obj.type }}"</div>
+            <div v-if="obj.hasNest && !obj.hasOf">
+              <schema-obj :schema-obj="obj.schemaObj" class="nest" />
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p>}</p>
     <div v-if="isArray(schemaObj.type)">]</div>
   </div>
 </template>
@@ -107,6 +96,11 @@ export default {
 .nest {
   display: block;
   margin-left: 5px;
+}
+.required {
+  margin: 0;
+  font-size: 10px;
+  color: #f00;
 }
 table td {
   word-break: break-all;
