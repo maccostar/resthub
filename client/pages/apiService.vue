@@ -115,14 +115,12 @@ export default {
       const arrayedPathsObj = Object.entries(
         this.replacedApiDoc.paths
       ).map((e) => [e[0], Object.entries(e[1])])
-      const arrOfFlatPathsObj = arrayedPathsObj
-        .map((e) => {
-          const objects = e[1].map((elem) => {
-            return { path: e[0], method: elem[0], opeObj: elem[1] }
-          })
-          return objects
+      const arrOfFlatPathsObj = arrayedPathsObj.flatMap((e) => {
+        const objects = e[1].map((elem) => {
+          return { path: e[0], method: elem[0], opeObj: elem[1] }
         })
-        .flat()
+        return objects
+      })
       // sort ApiDoc by path(a->z) and group ApiDoc by UniqueTags
       const groupsByTag = this.uniqueTags.map((tag) => {
         return {

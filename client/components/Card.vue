@@ -5,7 +5,7 @@
         <div class="logo">
           <img :src="api.icon" alt="" />
         </div>
-        <div class="apiname">{{ api.apiName }}</div>
+        <div class="apiname">{{ api.service }}</div>
       </div>
       <div class="api-discription">
         {{ api.discription }}

@@ -5,11 +5,12 @@
       :items="mediaTypeObjects"
       item-text="mediaType"
       item-value="mediaTypeObject"
-      dense
       outlined
+      dense
+      return-object
     ></v-select>
     <!-- 検証用 -->
-    {{ selectedMediaType.mediaTypeObj }}
+    <!-- {{ selectedMediaType.mediaTypeObj }} -->
     <!-- mediaTypeObjectレイヤーのexample(s)は今時点では取り扱わない -->
     <p>Schema</p>
     <schema-obj :schema-obj="selectedSchemaObj" />
@@ -34,8 +35,7 @@ export default {
   },
   data() {
     return {
-      selectedMediaType: {},
-      selectedSchemaObj: {}
+      selectedMediaType: {}
     }
   },
   computed: {
@@ -46,12 +46,20 @@ export default {
         }
       )
       return mediaTypeObjects
+    },
+    selectedSchemaObj() {
+      const hasSchemaObj = (obj) => {
+        return 'schema' in obj ? obj.schema : {}
+      }
+      const schemaObj =
+        'mediaTypeObj' in this.selectedMediaType
+          ? hasSchemaObj(this.selectedMediaType.mediaTypeObj)
+          : {}
+      return schemaObj
     }
   },
   mounted() {
     this.selectedMediaType = this.mediaTypeObjects[0]
-    this.selectedSchemaObj = this.selectedMediaType.mediaTypeObj.schema
   }
-  // beforeUpdate() {},
 }
 </script>

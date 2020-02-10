@@ -21,7 +21,7 @@
       </div>
       <div v-if="existsKey(flatPathsObj.opeObj, 'parameters')">
         <h6>Parameters</h6>
-        <table>
+        <table style="width: 100%;">
           <tr>
             <th style="width: 30%;">Name</th>
             <th style="width: 20%;">Type</th>
