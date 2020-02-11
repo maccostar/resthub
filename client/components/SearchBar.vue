@@ -32,43 +32,45 @@ export default class extends Vue {
     const searchWords = { service: '', owner: '', other: '' }
     const serviceHead = this.keyword.indexOf(searchKey[0])
     const ownerHead = this.keyword.indexOf(searchKey[1])
-    const serviceWordHead = serviceHead + searchKey[0].length
-    const ownerWordHead = ownerHead + searchKey[1].length
-    const end = this.keyword.length
+    const wordLength = this.keyword.length
 
     await this.initializeApiList()
 
-    if (end === 0) {
+    if (wordLength === 0) {
       return
     }
 
-    if (serviceHead > -1 && ownerHead > -1) {
-      if (serviceHead > ownerHead) {
-        searchWords.service = this.pickWord(serviceWordHead, end)
-        searchWords.owner = this.pickWord(ownerWordHead, serviceHead)
-      } else {
-        searchWords.owner = this.pickWord(ownerWordHead, end)
-        searchWords.service = this.pickWord(serviceWordHead, ownerHead)
-      }
-    } else if (serviceHead > -1) {
-      searchWords.service = this.pickWord(serviceWordHead, end)
-    } else if (ownerHead > -1) {
-      searchWords.owner = this.pickWord(ownerWordHead, end)
-    } else {
-      searchWords.other = this.pickWord(0, end)
+    if (serviceHead === -1 && ownerHead === -1) {
+      searchWords.other = this.pickWord(0, wordLength)
+    }
+    if (serviceHead !== -1) {
+      searchWords.service = this.pickWord(
+        serviceHead + searchKey[0].length,
+        ownerHead === -1
+          ? wordLength
+          : serviceHead > ownerHead
+          ? wordLength
+          : ownerHead
+      )
+    }
+    if (ownerHead !== -1) {
+      searchWords.owner = this.pickWord(
+        ownerHead + searchKey[1].length,
+        serviceHead === -1
+          ? wordLength
+          : serviceHead > ownerHead
+          ? serviceHead
+          : wordLength
+      )
     }
 
     this.searchedApilist = this.apilist.filter((i) => {
       if (
-        (i.service.match(RegExp(searchWords.other, 'i')) ||
-          i.owner.match(RegExp(searchWords.other, 'i'))) &&
         searchWords.other
-      )
-        return i
-      if (
-        i.service.match(RegExp(searchWords.service, 'i')) &&
-        i.owner.match(RegExp(searchWords.owner, 'i')) &&
-        !searchWords.other
+          ? i.service.match(RegExp(searchWords.other, 'i')) ||
+            i.owner.match(RegExp(searchWords.other, 'i'))
+          : i.service.match(RegExp(searchWords.service, 'i')) &&
+            i.owner.match(RegExp(searchWords.owner, 'i'))
       )
         return i
     })
