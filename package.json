@@ -50,8 +50,10 @@
     "@nuxt/typescript-runtime": "^0.3.7",
     "@nuxtjs/axios": "^5.9.3",
     "@nuxtjs/dotenv": "^1.4.1",
+    "@nuxtjs/markdownit": "^1.2.7",
     "nuxt": "^2.11.0",
-    "nuxt-property-decorator": "^2.5.0"
+    "nuxt-property-decorator": "^2.5.0",
+    "swagger-parser": "^8.0.4"
   },
   "devDependencies": {
     "@nuxt/typescript-build": "^0.5.6",

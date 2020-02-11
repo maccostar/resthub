@@ -58,7 +58,8 @@ const config: Configuration = {
    */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    '@nuxtjs/markdownit'
   ],
   /*
    ** Axios module configuration
@@ -74,6 +75,9 @@ const config: Configuration = {
       font: { family: 'Noto Sans JP' }
     },
     treeShake: true
+  },
+  markdownit: {
+    injected: true
   },
   /*
    ** Build configuration

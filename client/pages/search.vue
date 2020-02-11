@@ -3,14 +3,20 @@
     <side-bar :apilist="apilist" />
     <div class="contents-area">
       <v-text-field
+        v-model="keyword"
         label="Please enter keywords to search APIs"
+        placeholder="service: owner:"
         prepend-inner-icon="mdi-magnify"
         single-line
         outlined
         dense
+        @blur="search"
+        @keyup.enter="search"
       />
       <div class="search-result-header">
-        <div class="number-of-hits"><span>345</span> apis found</div>
+        <div class="number-of-hits">
+          <span>{{ searchedApilist.length }}</span> apis found
+        </div>
         <Pagination
           :num="apilist.length"
           :page="pageNumber"
@@ -19,14 +25,24 @@
       </div>
       <div class="search-result-body">
         <div
+          v-for="(api, index) in searchedApilist"
+          :key="index"
+          class="card-wrapper"
+        >
+          <!-- <div
           v-for="(api, index) in apilist.slice(
             pageItemNumber * pageNumber - pageItemNumber,
             pageItemNumber * pageNumber
           )"
           :key="index"
           class="card-wrapper"
-        >
-          <Card :api="api" />
+        > -->
+          <nuxt-link
+            class="link"
+            :to="`/apiService?apiServiceId=${api.apiServiceId}`"
+          >
+            <Card :api="api" />
+          </nuxt-link>
         </div>
       </div>
       <Pagination
@@ -54,9 +70,11 @@ import SideBar from '~/components/SideBar.vue'
   }
 })
 export default class extends Vue {
+  keyword = ''
   apilist: Api[] = []
   pageItemNumber: Number = 11
   pageNumber: Number = 1
+  searchedApilist: Api[] = []
 
   get uniqueCategories() {
     return this.apilist
@@ -67,6 +85,60 @@ export default class extends Vue {
 
   onReceivePage(page: number) {
     this.pageNumber = page
+  }
+
+  created() {
+    this.initializeApiList()
+  }
+
+  search() {
+    const searchKey = ['service:', 'owner:']
+    const searchWords = { service: '', owner: '', other: '' }
+    const serviceHead = this.keyword.indexOf(searchKey[0])
+    const ownerHead = this.keyword.indexOf(searchKey[1])
+    const serviceWordHead = serviceHead + searchKey[0].length
+    const ownerWordHead = ownerHead + searchKey[1].length
+    const end = this.keyword.length
+    if (serviceHead > -1 && ownerHead > -1) {
+      if (serviceHead > ownerHead) {
+        searchWords.service = this.pickWord(serviceWordHead, end)
+        searchWords.owner = this.pickWord(ownerWordHead, serviceHead)
+      } else {
+        searchWords.owner = this.pickWord(ownerWordHead, end)
+        searchWords.service = this.pickWord(serviceWordHead, ownerHead)
+      }
+    } else if (serviceHead > -1) {
+      searchWords.service = this.pickWord(serviceWordHead, end)
+    } else if (ownerHead > -1) {
+      searchWords.owner = this.pickWord(ownerWordHead, end)
+    } else {
+      searchWords.other = this.pickWord(0, end)
+    }
+
+    this.initializeApiList()
+    this.searchedApilist = this.searchedApilist.filter((i) => {
+      if (
+        (i.service.match(RegExp(searchWords.other, 'i')) ||
+          i.owner.match(RegExp(searchWords.other, 'i'))) &&
+        searchWords.other
+      )
+        return i
+      if (
+        i.service.match(RegExp(searchWords.service, 'i')) &&
+        i.owner.match(RegExp(searchWords.owner, 'i')) &&
+        !searchWords.other
+      )
+        return i
+    })
+  }
+
+  get pickWord() {
+    return (start: number, end: number) =>
+      this.keyword.substring(start, end).trim()
+  }
+
+  initializeApiList() {
+    this.searchedApilist = this.apilist
   }
 }
 </script>
@@ -108,6 +180,13 @@ export default class extends Vue {
 
 .card-wrapper:nth-child(even) {
   background-color: #f7f7f7;
+}
+
+.link {
+  width: 100%;
+  height: 100%;
+  color: #646464;
+  text-decoration: none;
 }
 
 /* atoms */
