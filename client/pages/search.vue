@@ -18,7 +18,7 @@
           <span>{{ searchedApilist.length }}</span> apis found
         </div>
         <Pagination
-          :num="apilist.length"
+          :num="searchedApilist.length"
           :page="pageNumber"
           @input="onReceivePage"
         />
@@ -38,7 +38,7 @@
         </div>
       </div>
       <Pagination
-        :num="apilist.length"
+        :num="searchedApilist.length"
         :page="pageNumber"
         @input="onReceivePage"
       />
@@ -99,6 +99,7 @@ export default class extends Vue {
     const serviceWordHead = serviceHead + searchKey[0].length
     const ownerWordHead = ownerHead + searchKey[1].length
     const end = this.keyword.length
+
     if (serviceHead > -1 && ownerHead > -1) {
       if (serviceHead > ownerHead) {
         searchWords.service = this.pickWord(serviceWordHead, end)
