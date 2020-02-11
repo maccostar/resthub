@@ -25,18 +25,10 @@
       </div>
       <div class="search-result-body">
         <div
-          v-for="(api, index) in searchedApilist"
+          v-for="(api, index) in getPaginationList()"
           :key="index"
           class="card-wrapper"
         >
-          <!-- <div
-          v-for="(api, index) in apilist.slice(
-            pageItemNumber * pageNumber - pageItemNumber,
-            pageItemNumber * pageNumber
-          )"
-          :key="index"
-          class="card-wrapper"
-        > -->
           <nuxt-link
             class="link"
             :to="`/apiService?apiServiceId=${api.apiServiceId}`"
@@ -61,6 +53,8 @@ import Pagination from '~/components/Pagination.vue'
 import Card from '~/components/Card.vue'
 import SideBar from '~/components/SideBar.vue'
 
+const PAGE_ITEM_NUMBER = 10
+
 @Component({
   components: { Pagination, Card, SideBar },
   async asyncData() {
@@ -72,8 +66,7 @@ import SideBar from '~/components/SideBar.vue'
 export default class extends Vue {
   keyword = ''
   apilist: Api[] = []
-  pageItemNumber: Number = 11
-  pageNumber: Number = 1
+  pageNumber = 1
   searchedApilist: Api[] = []
 
   get uniqueCategories() {
@@ -83,12 +76,19 @@ export default class extends Vue {
       .filter((element, index, array) => array.indexOf(element) === index)
   }
 
+  created() {
+    this.initializeApiList()
+  }
+
   onReceivePage(page: number) {
     this.pageNumber = page
   }
 
-  created() {
-    this.initializeApiList()
+  getPaginationList() {
+    return this.searchedApilist.slice(
+      PAGE_ITEM_NUMBER * this.pageNumber - PAGE_ITEM_NUMBER,
+      PAGE_ITEM_NUMBER * this.pageNumber
+    )
   }
 
   search() {
