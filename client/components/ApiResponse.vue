@@ -9,8 +9,6 @@
       dense
       return-object
     ></v-select>
-    <!-- 検証用 -->
-    {{ selectedMediaType.mediaTypeObj }}
     <!-- mediaTypeObjectレイヤーのexample(s)は今時点では取り扱わない -->
     <p>Schema</p>
     <schema-obj :schema-obj="selectedSchemaObj" />
