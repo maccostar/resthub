@@ -63,13 +63,12 @@ export default {
     },
     getProperties(obj) {
       const setProperties = (obj) => {
-        const _required = 'required' in obj ? obj.required : []
+        const required = 'required' in obj ? obj.required : []
         const properties = Object.entries(obj.properties).map((e) => {
           // example(s)・enum等はまだ実装していないß
           return {
             name: e[0],
-            required:
-              'requied' in e[1] ? e[1].required : _required.includes(e[0]),
+            required: required.includes(e[0]),
             // undefinedの場合はtypeをもっていない
             type: 'type' in e[1] ? e[1].type : 'undefined',
             hasOf: this.existsOf(obj),
