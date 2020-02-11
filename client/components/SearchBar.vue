@@ -48,7 +48,7 @@ export default class extends Vue {
         serviceHead + searchKey[0].length,
         ownerHead === -1
           ? wordLength
-          : serviceHead > ownerHead
+          : ownerHead < serviceHead
           ? wordLength
           : ownerHead
       )
@@ -58,9 +58,9 @@ export default class extends Vue {
         ownerHead + searchKey[1].length,
         serviceHead === -1
           ? wordLength
-          : serviceHead > ownerHead
-          ? serviceHead
-          : wordLength
+          : serviceHead < ownerHead
+          ? wordLength
+          : serviceHead
       )
     }
 
