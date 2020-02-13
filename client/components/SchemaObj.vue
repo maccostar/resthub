@@ -54,6 +54,8 @@ export default {
           : this.getProperties(obj.items)
       } else if ('allOf' in obj) {
         return this.mergeAllOf(obj.allOf)
+      } else if ('oneOf' in obj) {
+        return this.mergeOneOf(obj.oneOf)
       } else {
         return this.dummyArr
       }
@@ -61,7 +63,7 @@ export default {
   },
   methods: {
     existsOf(obj) {
-      return 'oneOf' in obj || 'anyOf' in obj
+      return 'anyOf' in obj
     },
     isArray(obj) {
       return obj === 'array'
@@ -86,6 +88,18 @@ export default {
     mergeAllOf(arr) {
       const properties = arr.flatMap((obj) => {
         return this.getProperties(obj)
+      })
+      return properties
+    },
+    mergeOneOf(arr) {
+      const properties = arr.map((obj) => {
+        return {
+          name: 'oneOf',
+          required: false,
+          type: 'oneOf',
+          hasNest: true,
+          schemaObj: obj
+        }
       })
       return properties
     }
