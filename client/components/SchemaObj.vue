@@ -12,7 +12,7 @@
           <td style="width: 5px;">:</td>
           <td style="width: calc(100% - 95px);">
             <div v-if="!obj.hasNest">"{{ obj.type }}"</div>
-            <div v-if="obj.hasNest && !obj.hasOf">
+            <div v-if="obj.hasNest">
               <schema-obj :schema-obj="obj.schemaObj" class="nest" />
             </div>
           </td>
@@ -40,15 +40,20 @@ export default {
   },
   data() {
     return {
-      dummyArr: [{ name: 'err', type: 'err', hasItems: false }]
+      dummyArr: [{ name: 'err', type: 'err', hasNest: false }]
     }
   },
   computed: {
     objectsToShow() {
-      if ('properties' in this.schemaObj) {
-        return this.getProperties(this.schemaObj)
-      } else if ('items' in this.schemaObj) {
-        return this.getProperties(this.schemaObj.items)
+      const obj = this.schemaObj
+      if ('properties' in obj) {
+        return this.getProperties(obj)
+      } else if ('items' in obj) {
+        return 'allOf' in obj.items
+          ? this.mergeAllOf(obj.items.allOf)
+          : this.getProperties(obj.items)
+      } else if ('allOf' in obj) {
+        return this.mergeAllOf(obj.allOf)
       } else {
         return this.dummyArr
       }
@@ -56,7 +61,8 @@ export default {
   },
   methods: {
     existsOf(obj) {
-      return 'allOf' in obj || 'oneOf' in obj || 'anyOf' in obj
+      return 'oneOf' in obj || 'anyOf' in obj
+      // return 'allOf' in obj || 'oneOf' in obj || 'anyOf' in obj
     },
     isArray(obj) {
       return obj === 'array'
@@ -65,22 +71,24 @@ export default {
       const setProperties = (obj) => {
         const required = 'required' in obj ? obj.required : []
         const properties = Object.entries(obj.properties).map((e) => {
-          // example(s)・enum等はまだ実装していないß
+          // example(s)・enum等はまだ実装していない
           return {
             name: e[0],
             required: required.includes(e[0]),
-            // undefinedの場合はtypeをもっていない
             type: 'type' in e[1] ? e[1].type : 'undefined',
-            hasOf: this.existsOf(obj),
             hasNest: 'items' in e[1] || 'properties' in e[1],
             schemaObj: e[1]
           }
         })
         return properties
       }
-      return !this.existsOf(obj) && 'properties' in obj
-        ? setProperties(obj)
-        : this.dummyArr
+      return 'properties' in obj ? setProperties(obj) : obj
+    },
+    mergeAllOf(arr) {
+      const properties = arr.flatMap((obj) => {
+        return this.getProperties(obj)
+      })
+      return properties
     }
   }
 }
