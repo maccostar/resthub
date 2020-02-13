@@ -62,7 +62,6 @@ export default {
   methods: {
     existsOf(obj) {
       return 'oneOf' in obj || 'anyOf' in obj
-      // return 'allOf' in obj || 'oneOf' in obj || 'anyOf' in obj
     },
     isArray(obj) {
       return obj === 'array'
