@@ -45,28 +45,29 @@ export default {
   },
   computed: {
     objectsToShow() {
-      const obj = this.schemaObj
-      if ('properties' in obj) {
-        return this.getProperties(obj)
-      } else if ('items' in obj) {
-        return 'allOf' in obj.items
-          ? this.mergeAllOf(obj.items.allOf)
-          : this.getProperties(obj.items)
-      } else if ('allOf' in obj) {
-        return this.mergeAllOf(obj.allOf)
-      } else if ('oneOf' in obj) {
-        return this.mergeOneOf(obj.oneOf)
-      } else {
-        return this.dummyArr
-      }
+      return this.judgeFuncAndObject(this.schemaObj)
     }
   },
   methods: {
-    existsOf(obj) {
-      return 'anyOf' in obj
-    },
     isArray(obj) {
       return obj === 'array'
+    },
+    judgeFuncAndObject(obj) {
+      if ('properties' in obj) {
+        return this.getProperties(obj)
+      }
+      if ('items' in obj) {
+        return 'allOf' in obj.items || 'oneOf' in obj.items
+          ? this.judgeFuncAndObject(obj.items.allOf || obj.item.oneOf)
+          : this.getProperties(obj.items)
+      }
+      if ('allOf' in obj) {
+        return this.mergeAllOf(obj.allOf)
+      }
+      if ('oneOf' in obj) {
+        return this.mergeOneOf(obj.oneOf)
+      }
+      return this.dummyArr
     },
     getProperties(obj) {
       const setProperties = (obj) => {
