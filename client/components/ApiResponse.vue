@@ -46,11 +46,9 @@ export default {
       const hasSchemaObj = (obj) => {
         return 'schema' in obj ? obj.schema : {}
       }
-      const schemaObj =
-        'mediaTypeObj' in this.selectedMediaType
-          ? hasSchemaObj(this.selectedMediaType.mediaTypeObj)
-          : {}
-      return schemaObj
+      return 'mediaTypeObj' in this.selectedMediaType
+        ? hasSchemaObj(this.selectedMediaType.mediaTypeObj)
+        : {}
     }
   },
   mounted() {

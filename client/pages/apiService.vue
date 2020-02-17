@@ -80,15 +80,14 @@ export default {
         const idxOf2ndDQ = str.indexOf(`"`, 1)
         const refObj = str.slice(1, idxOf2ndDQ).split('/')
         const refPath = `"refPath":"#/${refObj[1]}/${refObj[2]}/${refObj[3]}", `
-        const repStr =
+        return (
           refPath +
           JSON.stringify(this.apiDoc[refObj[1]][refObj[2]][refObj[3]]).slice(
             1,
             -1
           ) +
           str.slice(idxOf2ndDQ + 1)
-
-        return repStr
+        )
       }
       const replacedObj = (obj) => {
         const _string = JSON.stringify(obj)
@@ -116,13 +115,12 @@ export default {
         this.replacedApiDoc.paths
       ).map((e) => [e[0], Object.entries(e[1])])
       const arrOfFlatPathsObj = arrayedPathsObj.flatMap((e) => {
-        const objects = e[1].map((elem) => {
+        return e[1].map((elem) => {
           return { path: e[0], method: elem[0], opeObj: elem[1] }
         })
-        return objects
       })
       // sort ApiDoc by path(a->z) and group ApiDoc by UniqueTags
-      const groupsByTag = this.uniqueTags.map((tag) => {
+      return this.uniqueTags.map((tag) => {
         return {
           tag,
           arrOfFlatPathsObj: [...arrOfFlatPathsObj]
@@ -134,7 +132,6 @@ export default {
             })
         }
       })
-      return groupsByTag
     }
   }
 }
