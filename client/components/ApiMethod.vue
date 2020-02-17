@@ -28,23 +28,50 @@
       </div>
       <div v-if="existsKey(flatPathsObj.opeObj, 'responses')">
         <h6>Responses</h6>
+        <table style="width: 100%;">
+          <tr>
+            <th style="width: 20%;">StatusCode</th>
+            <th style="width: 80%;">Description</th>
+          </tr>
+          <tr v-for="(response, index) in arrOfResponse" :key="index">
+            <td>
+              {{ response.statusCode }}
+            </td>
+            <td>
+              {{ response.responseObj.description }}
+              <api-response
+                v-if="existsKey(response.responseObj, 'content')"
+                :status-code="response.statusCode"
+                :response-obj="response.responseObj"
+              />
+            </td>
+          </tr>
+        </table>
       </div>
     </div>
   </div>
 </template>
-
 <script>
 import ApiParameters from '~/components/ApiParameters.vue'
+import ApiResponse from '~/components/ApiResponse.vue'
 
 // This script don't use TypeScript temporarily.
 export default {
   components: {
-    ApiParameters
+    ApiParameters,
+    ApiResponse
   },
   props: {
     flatPathsObj: {
       type: Object,
       required: true
+    }
+  },
+  computed: {
+    arrOfResponse() {
+      return Object.entries(this.flatPathsObj.opeObj.responses).map((e) => {
+        return { statusCode: e[0], responseObj: e[1] }
+      })
     }
   },
   methods: {
@@ -63,7 +90,6 @@ export default {
   }
 }
 </script>
-
 <style scoped>
 .api-container {
   margin-top: -1px;
@@ -118,9 +144,6 @@ p {
   margin: 0;
 }
 h4 {
-  font-size: 16px;
-}
-h5 {
   font-size: 16px;
 }
 h6 {
