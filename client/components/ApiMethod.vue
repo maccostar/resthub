@@ -57,11 +57,7 @@
                   isString(parameter.schema.type) && hasEnum(parameter.schema)
                 "
               >
-                <v-select
-                  :items="parameter.schema.enum"
-                  outlined
-                  dense
-                ></v-select>
+                <v-select :items="parameter.schema.enum" outlined dense />
               </div>
               <div v-if="isBoolean(parameter.schema.type)">
                 <v-select :items="[true, false]" dense outlined></v-select>
