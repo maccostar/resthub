@@ -1,28 +1,15 @@
-name: Test
+name: Deploy
 
 on:
   push:
-    branches:
+    tags:
       - '**'
-    tags-ignore:
-      - '**'
-    paths:
-      - '**.jsx?'
-      - '**.tsx?'
-      - '**.vue'
-      - '**.s?css'
-  pull_request:
-    paths:
-      - '**.jsx?'
-      - '**.tsx?'
-      - '**.vue'
-      - '**.s?css'
 
 env:
   CACHE_VERSION: v1
 
 jobs:
-  test:
+  deploy:
     runs-on: ubuntu-latest
     env:
       CACHE_VERSION: ${{ secrets.CACHE_VERSION }}
@@ -42,7 +29,10 @@ jobs:
             ${{ runner.os }}-node-${{ env.CACHE_VERSION }}-
       - name: Install dependencies
         run: npm ci
-      - name: Run lint
-        run: npm run lint
-      - name: Run type tests
-        run: npm run build
+      - name: Build
+        run: npm run generate
+      - name: Deploy
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_S3_PUT_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_S3_PUT_SECRET_KEY }}
+        run: aws s3 cp dist/ ${{ secrets. AWS_S3_RESTHUB_BUCKET }} --recursive
