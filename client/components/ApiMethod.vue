@@ -21,54 +21,7 @@
       </div>
       <div v-if="existsKey(flatPathsObj.opeObj, 'parameters')">
         <h6>Parameters</h6>
-        <table>
-          <tr>
-            <th style="width: 30%;">Name</th>
-            <th style="width: 20%;">Type</th>
-            <th style="width: 50%;">Description</th>
-          </tr>
-          <tr
-            v-for="(parameter, index) in flatPathsObj.opeObj.parameters"
-            :key="index"
-          >
-            <td>
-              <p>{{ parameter.name }}</p>
-              <p>({{ parameter.in }})</p>
-              <span
-                v-if="parameter.required"
-                style="margin: 0; font-size: 10px; color: #f00;"
-              >
-                *requierd
-              </span>
-            </td>
-            <td>
-              <p>{{ parameter.schema.type }}</p>
-            </td>
-            <td>
-              <v-text-field
-                v-if="
-                  isString(parameter.schema.type) && !hasEnum(parameter.schema)
-                "
-                outlined
-                dense
-              />
-              <div
-                v-if="
-                  isString(parameter.schema.type) && hasEnum(parameter.schema)
-                "
-              >
-                <v-select
-                  :items="parameter.schema.enum"
-                  dense
-                  outlined
-                ></v-select>
-              </div>
-              <div v-if="isBoolean(parameter.schema.type)">
-                <v-select :items="[true, false]" dense outlined></v-select>
-              </div>
-            </td>
-          </tr>
-        </table>
+        <api-parameters :parameters="flatPathsObj.opeObj.parameters" />
       </div>
       <div v-if="existsKey(flatPathsObj.opeObj, 'requestBody')">
         <h6>RequestBody</h6>
@@ -81,8 +34,13 @@
 </template>
 
 <script>
+import ApiParameters from '~/components/ApiParameters.vue'
+
 // This script don't use TypeScript temporarily.
 export default {
+  components: {
+    ApiParameters
+  },
   props: {
     flatPathsObj: {
       type: Object,
@@ -153,7 +111,6 @@ export default {
   background-color: #ffadad;
 }
 table {
-  width: 100%;
   font-size: 13px;
   table-layout: fixed;
 }
