@@ -109,12 +109,9 @@ export default {
   },
   computed: {
     arrOfResponse() {
-      const arr = Object.entries(this.flatPathsObj.opeObj.responses).map(
-        (e) => {
-          return { statusCode: e[0], responseObj: e[1] }
-        }
-      )
-      return arr
+      return Object.entries(this.flatPathsObj.opeObj.responses).map((e) => {
+        return { statusCode: e[0], responseObj: e[1] }
+      })
     }
   },
   methods: {
