@@ -25,6 +25,12 @@
       </div>
       <div v-if="existsKey(flatPathsObj.opeObj, 'requestBody')">
         <h6>RequestBody</h6>
+        <api-request-body
+          :method="flatPathsObj.method"
+          :path="flatPathsObj.path"
+          :parameters="flatPathsObj.opeObj.parameters || []"
+          :request-body="flatPathsObj.opeObj.requestBody"
+        />
       </div>
       <div v-if="existsKey(flatPathsObj.opeObj, 'responses')">
         <h6>Responses</h6>
@@ -53,11 +59,13 @@
 </template>
 <script>
 import ApiParameters from '~/components/ApiParameters.vue'
+import ApiRequestBody from '~/components/ApiRequestBody.vue'
 import ApiResponse from '~/components/ApiResponse.vue'
 // This script don't use TypeScript temporarily.
 export default {
   components: {
     ApiParameters,
+    ApiRequestBody,
     ApiResponse
   },
   props: {
