@@ -21,7 +21,7 @@
       </div>
       <div v-if="existsKey(flatPathsObj.opeObj, 'parameters')">
         <h6>Parameters</h6>
-        <table>
+        <table style="width: 100%;">
           <tr>
             <th style="width: 30%;">Name</th>
             <th style="width: 20%;">Type</th>
@@ -57,11 +57,7 @@
                   isString(parameter.schema.type) && hasEnum(parameter.schema)
                 "
               >
-                <v-select
-                  :items="parameter.schema.enum"
-                  dense
-                  outlined
-                ></v-select>
+                <v-select :items="parameter.schema.enum" outlined dense />
               </div>
               <div v-if="isBoolean(parameter.schema.type)">
                 <v-select :items="[true, false]" dense outlined></v-select>
@@ -75,18 +71,47 @@
       </div>
       <div v-if="existsKey(flatPathsObj.opeObj, 'responses')">
         <h6>Responses</h6>
+        <table style="width: 100%;">
+          <tr>
+            <th style="width: 20%;">StatusCode</th>
+            <th style="width: 80%;">Description</th>
+          </tr>
+          <tr v-for="(response, index) in arrOfResponse" :key="index">
+            <td>
+              {{ response.statusCode }}
+            </td>
+            <td>
+              {{ response.responseObj.description }}
+              <api-response
+                v-if="existsKey(response.responseObj, 'content')"
+                :status-code="response.statusCode"
+                :response-obj="response.responseObj"
+              />
+            </td>
+          </tr>
+        </table>
       </div>
     </div>
   </div>
 </template>
-
 <script>
+import ApiResponse from '~/components/ApiResponse.vue'
 // This script don't use TypeScript temporarily.
 export default {
+  components: {
+    ApiResponse
+  },
   props: {
     flatPathsObj: {
       type: Object,
       required: true
+    }
+  },
+  computed: {
+    arrOfResponse() {
+      return Object.entries(this.flatPathsObj.opeObj.responses).map((e) => {
+        return { statusCode: e[0], responseObj: e[1] }
+      })
     }
   },
   methods: {
@@ -105,7 +130,6 @@ export default {
   }
 }
 </script>
-
 <style scoped>
 .api-container {
   margin-top: -1px;
@@ -153,7 +177,6 @@ export default {
   background-color: #ffadad;
 }
 table {
-  width: 100%;
   font-size: 13px;
   table-layout: fixed;
 }
@@ -161,9 +184,6 @@ p {
   margin: 0;
 }
 h4 {
-  font-size: 16px;
-}
-h5 {
   font-size: 16px;
 }
 h6 {
