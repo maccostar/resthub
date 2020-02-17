@@ -72,8 +72,8 @@ export default {
     getProperties(obj) {
       const setProperties = (obj) => {
         const required = 'required' in obj ? obj.required : []
-        const properties = Object.entries(obj.properties).map((e) => {
-          // example(s)・enum等はまだ実装していない
+        return Object.entries(obj.properties).map((e) => {
+          // example(s)・enum等はまだ実装していないß
           return {
             name: e[0],
             required: required.includes(e[0]),
@@ -82,7 +82,6 @@ export default {
             schemaObj: e[1]
           }
         })
-        return properties
       }
       return 'properties' in obj ? setProperties(obj) : obj
     },

@@ -8,7 +8,7 @@
       outlined
       dense
       return-object
-    ></v-select>
+    />
     <!-- mediaTypeObjectレイヤーのexample(s)は今時点では取り扱わない -->
     <p>Schema</p>
     <schema-obj :schema-obj="selectedSchemaObj" />
@@ -38,22 +38,17 @@ export default {
   },
   computed: {
     mediaTypeObjects() {
-      const mediaTypeObjects = Object.entries(this.responseObj.content).map(
-        (e) => {
-          return { mediaType: e[0], mediaTypeObj: e[1] }
-        }
-      )
-      return mediaTypeObjects
+      return Object.entries(this.responseObj.content).map((e) => {
+        return { mediaType: e[0], mediaTypeObj: e[1] }
+      })
     },
     selectedSchemaObj() {
       const hasSchemaObj = (obj) => {
         return 'schema' in obj ? obj.schema : {}
       }
-      const schemaObj =
-        'mediaTypeObj' in this.selectedMediaType
-          ? hasSchemaObj(this.selectedMediaType.mediaTypeObj)
-          : {}
-      return schemaObj
+      return 'mediaTypeObj' in this.selectedMediaType
+        ? hasSchemaObj(this.selectedMediaType.mediaTypeObj)
+        : {}
     }
   },
   mounted() {
