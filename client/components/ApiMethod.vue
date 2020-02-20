@@ -61,6 +61,7 @@
 import ApiParameters from '~/components/ApiParameters.vue'
 import ApiRequestBody from '~/components/ApiRequestBody.vue'
 import ApiResponse from '~/components/ApiResponse.vue'
+
 // This script don't use TypeScript temporarily.
 export default {
   components: {
@@ -76,12 +77,9 @@ export default {
   },
   computed: {
     arrOfResponse() {
-      const arr = Object.entries(this.flatPathsObj.opeObj.responses).map(
-        (e) => {
-          return { statusCode: e[0], responseObj: e[1] }
-        }
-      )
-      return arr
+      return Object.entries(this.flatPathsObj.opeObj.responses).map((e) => {
+        return { statusCode: e[0], responseObj: e[1] }
+      })
     }
   },
   methods: {

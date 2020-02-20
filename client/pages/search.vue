@@ -2,16 +2,10 @@
   <div class="search-container">
     <side-bar :apilist="apilist" />
     <div class="contents-area">
-      <v-text-field
-        v-model="keyword"
-        label="Please enter keywords to search APIs"
-        placeholder="service: owner:"
-        prepend-inner-icon="mdi-magnify"
-        single-line
-        outlined
-        dense
-        @blur="search"
-        @keyup.enter="search"
+      <search-bar
+        :apilist="searchedApilist"
+        :initialize-api-list="initializeApiList"
+        :search-apis="searchApis"
       />
       <div class="search-result-header">
         <div class="number-of-hits">
@@ -44,9 +38,10 @@ import { Api } from '~/apis/apilist.json'
 import Pagination from '~/components/Pagination.vue'
 import Card from '~/components/Card.vue'
 import SideBar from '~/components/SideBar.vue'
+import SearchBar from '~/components/SearchBar.vue'
 
 @Component({
-  components: { Pagination, Card, SideBar },
+  components: { Pagination, Card, SideBar, SearchBar },
   async asyncData() {
     return {
       apilist: await $nuxt.$api.apilist_json.$get()
@@ -54,14 +49,12 @@ import SideBar from '~/components/SideBar.vue'
   }
 })
 export default class extends Vue {
-  keyword = ''
   apilist: Api[] = []
   searchedApilist: Api[] = []
 
   get uniqueCategories() {
-    return this.apilist
-      .map((api) => api.category)
-      .flat()
+    return this.searchedApilist
+      .flatMap((api) => api.category)
       .filter((element, index, array) => array.indexOf(element) === index)
   }
 
@@ -69,54 +62,12 @@ export default class extends Vue {
     this.initializeApiList()
   }
 
-  search() {
-    const searchKey = ['service:', 'owner:']
-    const searchWords = { service: '', owner: '', other: '' }
-    const serviceHead = this.keyword.indexOf(searchKey[0])
-    const ownerHead = this.keyword.indexOf(searchKey[1])
-    const serviceWordHead = serviceHead + searchKey[0].length
-    const ownerWordHead = ownerHead + searchKey[1].length
-    const end = this.keyword.length
-    if (serviceHead > -1 && ownerHead > -1) {
-      if (serviceHead > ownerHead) {
-        searchWords.service = this.pickWord(serviceWordHead, end)
-        searchWords.owner = this.pickWord(ownerWordHead, serviceHead)
-      } else {
-        searchWords.owner = this.pickWord(ownerWordHead, end)
-        searchWords.service = this.pickWord(serviceWordHead, ownerHead)
-      }
-    } else if (serviceHead > -1) {
-      searchWords.service = this.pickWord(serviceWordHead, end)
-    } else if (ownerHead > -1) {
-      searchWords.owner = this.pickWord(ownerWordHead, end)
-    } else {
-      searchWords.other = this.pickWord(0, end)
-    }
-
-    this.initializeApiList()
-    this.searchedApilist = this.searchedApilist.filter((i) => {
-      if (
-        (i.service.match(RegExp(searchWords.other, 'i')) ||
-          i.owner.match(RegExp(searchWords.other, 'i'))) &&
-        searchWords.other
-      )
-        return i
-      if (
-        i.service.match(RegExp(searchWords.service, 'i')) &&
-        i.owner.match(RegExp(searchWords.owner, 'i')) &&
-        !searchWords.other
-      )
-        return i
-    })
-  }
-
-  get pickWord() {
-    return (start: number, end: number) =>
-      this.keyword.substring(start, end).trim()
-  }
-
   initializeApiList() {
     this.searchedApilist = this.apilist
+  }
+
+  searchApis(i: Api[]) {
+    this.searchedApilist = i
   }
 }
 </script>

@@ -54,11 +54,13 @@ export default {
     },
     judgeFuncAndObject(obj) {
       if ('properties' in obj) {
-        return this.getProperties(obj)
+        return 'allOf' in obj.properties || 'oneOf' in obj.properties
+          ? this.judgeFuncAndObject(obj)
+          : this.getProperties(obj)
       }
       if ('items' in obj) {
         return 'allOf' in obj.items || 'oneOf' in obj.items
-          ? this.judgeFuncAndObject(obj.items.allOf || obj.item.oneOf)
+          ? this.judgeFuncAndObject(obj.items)
           : this.getProperties(obj.items)
       }
       if ('allOf' in obj) {
@@ -72,8 +74,8 @@ export default {
     getProperties(obj) {
       const setProperties = (obj) => {
         const required = 'required' in obj ? obj.required : []
-        const properties = Object.entries(obj.properties).map((e) => {
-          // example(s)・enum等はまだ実装していない
+        return Object.entries(obj.properties).map((e) => {
+          // example(s)・enum等はまだ実装していないß
           return {
             name: e[0],
             required: required.includes(e[0]),
@@ -82,18 +84,16 @@ export default {
             schemaObj: e[1]
           }
         })
-        return properties
       }
       return 'properties' in obj ? setProperties(obj) : obj
     },
     mergeAllOf(arr) {
-      const properties = arr.flatMap((obj) => {
+      return arr.flatMap((obj) => {
         return this.getProperties(obj)
       })
-      return properties
     },
     mergeOneOf(arr) {
-      const properties = arr.map((obj) => {
+      return arr.map((obj) => {
         return {
           name: 'oneOf',
           required: false,
@@ -102,7 +102,6 @@ export default {
           schemaObj: obj
         }
       })
-      return properties
     }
   }
 }
