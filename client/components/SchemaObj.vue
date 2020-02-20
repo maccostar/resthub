@@ -54,7 +54,9 @@ export default {
     },
     judgeFuncAndObject(obj) {
       if ('properties' in obj) {
-        return this.getProperties(obj)
+        return 'allOf' in obj.properties || 'oneOf' in obj.properties
+          ? this.judgeFuncAndObject(obj)
+          : this.getProperties(obj)
       }
       if ('items' in obj) {
         return 'allOf' in obj.items || 'oneOf' in obj.items
@@ -86,13 +88,12 @@ export default {
       return 'properties' in obj ? setProperties(obj) : obj
     },
     mergeAllOf(arr) {
-      const properties = arr.flatMap((obj) => {
+      return arr.flatMap((obj) => {
         return this.getProperties(obj)
       })
-      return properties
     },
     mergeOneOf(arr) {
-      const properties = arr.map((obj) => {
+      return arr.map((obj) => {
         return {
           name: 'oneOf',
           required: false,
@@ -101,7 +102,6 @@ export default {
           schemaObj: obj
         }
       })
-      return properties
     }
   }
 }
