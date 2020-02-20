@@ -58,7 +58,7 @@ export default {
       }
       if ('items' in obj) {
         return 'allOf' in obj.items || 'oneOf' in obj.items
-          ? this.judgeFuncAndObject(obj.items.allOf || obj.item.oneOf)
+          ? this.judgeFuncAndObject(obj.items)
           : this.getProperties(obj.items)
       }
       if ('allOf' in obj) {
