@@ -19,7 +19,7 @@
       </div>
       <div class="search-result-body">
         <div
-          v-for="(api, index) in getPaginationList"
+          v-for="(api, index) in paginationList"
           :key="index"
           class="card-wrapper"
         >
@@ -69,7 +69,7 @@ export default class extends Vue {
       .filter((element, index, array) => array.indexOf(element) === index)
   }
 
-  get getPaginationList() {
+  get paginationList() {
     return this.searchedApilist.slice(
       PAGE_ITEM_NUMBER * this.pageNumber - PAGE_ITEM_NUMBER,
       PAGE_ITEM_NUMBER * this.pageNumber
