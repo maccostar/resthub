@@ -12,7 +12,7 @@
           <td style="width: 5px;">:</td>
           <td style="width: calc(100% - 95px);">
             <div v-if="!obj.hasNest">"{{ obj.type }}"</div>
-            <div v-if="obj.hasNest">
+            <div v-else>
               <schema-obj :schema-obj="obj.schemaObj" class="nest" />
             </div>
           </td>
