@@ -11,11 +11,15 @@
         <div class="number-of-hits">
           <span>{{ searchedApilist.length }}</span> apis found
         </div>
-        <Pagination />
+        <Pagination
+          :num="searchedApilist.length"
+          :page="pageNumber"
+          @input="onReceivePage"
+        />
       </div>
       <div class="search-result-body">
         <div
-          v-for="(api, index) in searchedApilist"
+          v-for="(api, index) in paginationList"
           :key="index"
           class="card-wrapper"
         >
@@ -27,7 +31,11 @@
           </nuxt-link>
         </div>
       </div>
-      <Pagination />
+      <Pagination
+        :num="searchedApilist.length"
+        :page="pageNumber"
+        @input="onReceivePage"
+      />
     </div>
   </div>
 </template>
@@ -40,6 +48,8 @@ import Card from '~/components/Card.vue'
 import SideBar from '~/components/SideBar.vue'
 import SearchBar from '~/components/SearchBar.vue'
 
+const PAGE_ITEM_NUMBER = 10
+
 @Component({
   components: { Pagination, Card, SideBar, SearchBar },
   async asyncData() {
@@ -50,6 +60,7 @@ import SearchBar from '~/components/SearchBar.vue'
 })
 export default class extends Vue {
   apilist: Api[] = []
+  pageNumber = 1
   searchedApilist: Api[] = []
 
   get uniqueCategories() {
@@ -58,8 +69,19 @@ export default class extends Vue {
       .filter((element, index, array) => array.indexOf(element) === index)
   }
 
+  get paginationList() {
+    return this.searchedApilist.slice(
+      PAGE_ITEM_NUMBER * this.pageNumber - PAGE_ITEM_NUMBER,
+      PAGE_ITEM_NUMBER * this.pageNumber
+    )
+  }
+
   created() {
     this.initializeApiList()
+  }
+
+  onReceivePage(page: number) {
+    this.pageNumber = page
   }
 
   initializeApiList() {
