@@ -1,18 +1,18 @@
 <template>
   <div class="search-container">
-    <side-bar :apilist="apilist" />
+    <side-bar :categories="uniqueCategories" @input="setFilterItems" />
     <div class="contents-area">
       <search-bar
-        :apilist="searchedApilist"
+        :apilist="filterdApiList"
         :initialize-api-list="initializeApiList"
         :search-apis="searchApis"
       />
       <div class="search-result-header">
         <div class="number-of-hits">
-          <span>{{ searchedApilist.length }}</span> apis found
+          <span>{{ filterdApiList.length }}</span> apis found
         </div>
         <Pagination
-          :num="searchedApilist.length"
+          :num="filterdApiList.length"
           :page="pageNumber"
           @input="onReceivePage"
         />
@@ -32,7 +32,7 @@
         </div>
       </div>
       <Pagination
-        :num="searchedApilist.length"
+        :num="filterdApiList.length"
         :page="pageNumber"
         @input="onReceivePage"
       />
@@ -62,18 +62,36 @@ export default class extends Vue {
   apilist: Api[] = []
   pageNumber = 1
   searchedApilist: Api[] = []
+  filterItems: string[] = []
 
   get uniqueCategories() {
-    return this.searchedApilist
+    const uniqueCategories: { [key: string]: number } = {}
+
+    this.searchedApilist
       .flatMap((api) => api.category)
-      .filter((element, index, array) => array.indexOf(element) === index)
+      .forEach((category, _index, array) => {
+        uniqueCategories[category] = array.filter(
+          (item) => item === category
+        ).length
+      })
+    return Object.entries(uniqueCategories)
   }
 
   get paginationList() {
-    return this.searchedApilist.slice(
+    return this.filterdApiList.slice(
       PAGE_ITEM_NUMBER * this.pageNumber - PAGE_ITEM_NUMBER,
       PAGE_ITEM_NUMBER * this.pageNumber
     )
+  }
+
+  get filterdApiList() {
+    return this.filterItems.length
+      ? this.searchedApilist.filter((api) =>
+          api.category.some((cate) =>
+            this.filterItems.some((item) => item === cate)
+          )
+        )
+      : this.searchedApilist
   }
 
   created() {
@@ -90,6 +108,10 @@ export default class extends Vue {
 
   searchApis(i: Api[]) {
     this.searchedApilist = i
+  }
+
+  setFilterItems(i: string[]) {
+    this.filterItems = i
   }
 }
 </script>
