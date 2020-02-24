@@ -17,8 +17,21 @@
             <schema-obj :schema-obj="selectedSchemaObj" />
           </td>
           <td style="width: 50%">
-            const hoge = {{ arrPath }}
-            <div>{{ parameters }}</div>
+            <p>import aspida from "@aspida/axios"</p>
+            <p>import api from "@api-types/tchop"</p>
+            <br />
+            <p>;(async () => {</p>
+            <!-- const userId = 0
+              const limit = 10
+              const client = api(aspida())
+
+              await client.api.v3.$2fa.$post({
+                headers: { x-tchop-app-id : test},
+                data: { email: test}
+            })
+            {{ arrPath }}
+ -->
+            <p>{{ parameters }}</p>
           </td>
         </tr>
       </tbody>
@@ -57,6 +70,13 @@ export default {
     }
   },
   computed: {
+    parametersGroupByIn() {
+      // const ins = ['headers', 'queries', 'data']
+      // const parameters = {
+      //    'headers'
+      // }
+      return 0
+    },
     arrPath() {
       const path = this.path
         .split('/')
