@@ -1,21 +1,22 @@
 <template>
   <div>
     <v-pagination
-      v-model="page"
+      :value="page"
       :length="Math.ceil(num / 10)"
       :total-visible="4"
-      @input="getNumber"
+      @input="setNumber"
     />
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'nuxt-property-decorator'
+import { Component, Vue, Prop, Emit } from 'nuxt-property-decorator'
 
 @Component({})
 export default class extends Vue {
-  getNumber() {
-    this.$emit('input', this.page)
+  @Emit('input')
+  setNumber(value: number) {
+    return value
   }
 
   @Prop({ type: Number, required: true }) num!: number
