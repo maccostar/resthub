@@ -35,11 +35,14 @@ const config: Configuration = {
   /*
    ** Global CSS
    */
-  css: ['~/assets/styles/settings.css'],
+  css: [
+    '~/assets/styles/settings.css',
+    './node_modules/highlight.js/styles/tomorrow-night-bright.css'
+  ],
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['~/plugins/axios', '~/plugins/api'],
+  plugins: ['~/plugins/axios', '~/plugins/api', '~/plugins/vue-highlightjs'],
   /*
    ** Nuxt.js dev-modules
    */
