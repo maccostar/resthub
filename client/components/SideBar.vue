@@ -26,16 +26,16 @@ export default class extends Vue {
   selectedItems: string[] = []
   @Prop({ type: Array, required: true }) categories!: Api[]
 
-  @Emit('input')
-  public input(selectedItems: string[]) {
+  @Emit()
+  input(selectedItems: string[]) {
     return selectedItems
   }
 
-  private get selectItems() {
+  get selectItems() {
     return this.selectedItems
   }
 
-  private set selectItems(value: string[]) {
+  set selectItems(value: string[]) {
     this.selectedItems = value
     this.input(this.selectedItems)
   }
