@@ -41,7 +41,10 @@
             v-for="(flatPathsObj, index) in group.arrOfFlatPathsObj"
             :key="index"
           >
-            <api-method :flat-paths-obj="flatPathsObj" />
+            <api-method
+              :flat-paths-obj="flatPathsObj"
+              :app-title="apiDoc.info.title"
+            />
           </div>
         </div>
       </div>

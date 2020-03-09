@@ -1,0 +1,15 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+      "version": "0.9",
+      "title": "EPOS WebAPI",
+      "description": "This is the newest version of the EPOS set of APIs, based on a based on a     subdivision of services. <br> This suite allows you to search for data and     metadata, and then to download or process search results.<br>  GUI     http://nodedev.bgs.ac.uk/epos/epos-gui/master/ gui (webapi client)<br>     SWAGGER  http://epos.cineca.it/webapi/swagger-ui.html swagger gui (webapi     client development) <br> Generated for Spring Framework EPOS ICT-C server     input via RabbitMQ Enjoy! <br>  <br> Contacts: <br>  <br>  EPOS Web Api Team     apis@lists.epos-ip.org"
+  },
+  "paths": {},
+  "servers": [
+      {
+          "description": "SwaggerHub API Auto Mocking",
+          "url": "https://virtserver.swaggerhub.com/vvalerio/EPOSwebapi/0.9"
+      }
+  ]
+}

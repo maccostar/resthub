@@ -19,13 +19,29 @@
         <!-- eslint-disable-next-line vue/no-v-html -->
         <div v-html="$md.render(flatPathsObj.opeObj.description)" />
       </div>
-      <div v-if="existsKey(flatPathsObj.opeObj, 'parameters')">
+      <div>
         <h6>Parameters</h6>
-        <api-parameters :parameters="flatPathsObj.opeObj.parameters" />
+        <div v-if="existsKey(flatPathsObj.opeObj, 'parameters')">
+          <api-parameters :parameters="flatPathsObj.opeObj.parameters" />
+        </div>
+        <div v-else>
+          <p>No Parameters</p>
+        </div>
       </div>
       <div v-if="existsKey(flatPathsObj.opeObj, 'requestBody')">
         <h6>RequestBody</h6>
         <api-request-body
+          :app-title="appTitle"
+          :method="flatPathsObj.method"
+          :path="flatPathsObj.path"
+          :parameters="flatPathsObj.opeObj.parameters || []"
+          :request-body="flatPathsObj.opeObj.requestBody"
+        />
+      </div>
+      <div>
+        <h6>Example: Request statement by Aspida</h6>
+        <example
+          :app-title="appTitle"
           :method="flatPathsObj.method"
           :path="flatPathsObj.path"
           :parameters="flatPathsObj.opeObj.parameters || []"
@@ -60,6 +76,7 @@
 <script>
 import ApiParameters from '~/components/ApiParameters.vue'
 import ApiRequestBody from '~/components/ApiRequestBody.vue'
+import Example from '~/components/Example.vue'
 import ApiResponse from '~/components/ApiResponse.vue'
 
 // This script don't use TypeScript temporarily.
@@ -67,11 +84,16 @@ export default {
   components: {
     ApiParameters,
     ApiRequestBody,
+    Example,
     ApiResponse
   },
   props: {
     flatPathsObj: {
       type: Object,
+      required: true
+    },
+    appTitle: {
+      type: String,
       required: true
     }
   },
