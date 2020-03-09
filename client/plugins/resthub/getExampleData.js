@@ -2,6 +2,13 @@ const getExampleData = (schemaObj) => {
   const arr = judgeFuncAndObject(schemaObj).map((e) => {
     return !e.hasNest ? e : getExampleData(e)
   })
+  // const getExampleObj = (obj) => {
+  //   judgeFuncAndObject(obj).map((e) => {
+  //     return !e.hasNest ? e : getExampleObj(e)
+  //   })
+  // }
+  // const obj = getExampleObj(schemaObj)
+
   return arr
 }
 
