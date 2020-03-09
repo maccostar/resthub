@@ -1,15 +1,21 @@
 const getExampleData = (schemaObj) => {
-  const arr = judgeFuncAndObject(schemaObj).map((e) => {
-    return !e.hasNest ? e : getExampleData(e)
-  })
-  // const getExampleObj = (obj) => {
-  //   judgeFuncAndObject(obj).map((e) => {
-  //     return !e.hasNest ? e : getExampleObj(e)
-  //   })
-  // }
-  // const obj = getExampleObj(schemaObj)
+  const getExampleObj = (obj) => {
+    return judgeFuncAndObject(obj).map((e) => {
+      return !e.hasNest
+        ? e
+        : {
+            name: e.name,
+            required: e.required,
+            type: e.type,
+            hasNest: e.hasNest,
+            schemaObj: e.schemaObj,
+            nest: getExampleObj(e.schemaObj)
+          }
+    })
+  }
+  const obj = getExampleObj(schemaObj)
 
-  return arr
+  return obj
 }
 
 // eslint-disable-next-line no-empty-pattern
@@ -53,7 +59,7 @@ const getProperties = (obj) => {
       }
     })
   }
-  return 'properties' in obj ? setProperties(obj) : obj
+  return 'properties' in obj ? setProperties(obj) : [obj]
 }
 
 const mergeAllOf = (arr) => {

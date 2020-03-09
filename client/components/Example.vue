@@ -4,7 +4,6 @@
       <code class="typescript hljs">{{ exampleAspida }}
       </code>
     </pre>
-    {{ hoge }}
   </div>
 </template>
 <script>
@@ -35,7 +34,8 @@ export default {
   },
   data() {
     return {
-      hoge: {}
+      constStr: '',
+      argumentStr: ''
     }
   },
   computed: {
@@ -61,7 +61,7 @@ export default {
         this.parameters.length > 0
           ? this.parameters.reduce((result, elem) => {
               return `${result} \n\t const ${elem.name} : ${elem.schema.type} = 'test'`
-            }, '')
+            }, this.constStr)
           : ''
       const asyncStr = [
         `;(async () => {`,
@@ -90,7 +90,8 @@ export default {
             \t }`
         })
         .join(',')
-      // データrequestBodyの追加がまだ
+      const dataParameters = this.argumentStr
+
       const path = this.path
         .split('/')
         .map((elem) => {
@@ -101,18 +102,56 @@ export default {
         .join('.')
       const method = [`${path}.$${this.method}(`, `)`]
 
-      return exampleParameters.length > 1
-        ? `${method[0]}{ ${exampleParameters} \n\t}${method[1]}`
-        : method[0] + method[1]
+      const getParams = () => {
+        if (exampleParameters.length > 1 && dataParameters.length > 1) {
+          return `${method[0]}{ ${exampleParameters}, \n\t ${dataParameters} \n\t}${method[1]}`
+        }
+        if (exampleParameters.length > 1) {
+          return `${method[0]}{ ${exampleParameters} \n\t}${method[1]}`
+        }
+        if (dataParameters.length > 1) {
+          return `${method[0]}{ ${dataParameters} \n\t}${method[1]}`
+        }
+        return method[0] + method[1]
+      }
+
+      return getParams()
     }
   },
-  mounted() {
+  created() {
     const hasRequestBody = this.requestBody !== undefined
     if (hasRequestBody) {
       const mediaTypeObj = Object.entries(this.requestBody.content)[0][1]
       const schemaObj = 'schema' in mediaTypeObj ? mediaTypeObj.schema : {}
-      this.hoge = this.$getExampleData(schemaObj)
-      // console.log(this.hoge)
+      const obj = this.$getExampleData(schemaObj)
+      this.constStr = this.getConstStr(obj, '\n\t')
+      this.argumentStr = this.getArgumentStr(obj, '\n\t\t\t')
+    }
+  },
+  methods: {
+    getConstStr: (obj, formatStr) => {
+      const getStr = (obj, formatStr) => {
+        return obj.map((e) => {
+          const nextFormatStr = `${formatStr}\t`
+          return !e.hasNest
+            ? `${formatStr} const ${e.name} : ${e.type} = 'hoge'`
+            : `${formatStr} const ${e.name} : ${e.type} ${getStr(
+                e.nest,
+                nextFormatStr
+              )} `
+        })
+      }
+      return `${getStr(obj, formatStr).join('')}`
+    },
+    getArgumentStr: (obj, formatStr) => {
+      const str = obj
+        .map((e) => {
+          return `${formatStr} ${e.name}`
+        })
+        .join(',')
+      return str.length > `${formatStr} `.length
+        ? `\t data:{ ${str} \n\t\t}`
+        : ``
     }
   }
 }
