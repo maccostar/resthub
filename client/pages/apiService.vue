@@ -103,7 +103,8 @@ export default {
       const tagsInPathsObject = Object.entries(this.apiDoc.paths)
         .flatMap((endpoint) => Object.values(endpoint[1]))
         .flatMap((e) => e.tags)
-      const tagsInTagsObject = this.apiDoc.tags.map((e) => e.name)
+      const tagsInTagsObject =
+        'tags' in this.apiDoc ? this.apiDoc.tags.map((e) => e.name) : []
       // merge and get unique
       return tagsInTagsObject
         .concat(tagsInPathsObject)
@@ -120,18 +121,29 @@ export default {
         })
       })
       // sort ApiDoc by path(a->z) and group ApiDoc by UniqueTags
-      return this.uniqueTags.map((tag) => {
-        return {
-          tag,
-          arrOfFlatPathsObj: [...arrOfFlatPathsObj]
-            .filter((element) => element.opeObj.tags.includes(tag))
-            .sort((a, b) => {
-              const _a = a.path.toString().toLowerCase()
-              const _b = b.path.toString().toLowerCase()
-              return _a < _b ? -1 : 1
-            })
-        }
-      })
+      return this.uniqueTags.length > 1
+        ? this.uniqueTags.map((tag) => {
+            return {
+              tag,
+              arrOfFlatPathsObj: [...arrOfFlatPathsObj]
+                .filter((element) => element.opeObj.tags.includes(tag))
+                .sort((a, b) => {
+                  const _a = a.path.toString().toLowerCase()
+                  const _b = b.path.toString().toLowerCase()
+                  return _a < _b ? -1 : 1
+                })
+            }
+          })
+        : [
+            {
+              tag: ' ',
+              arrOfFlatPathsObj: [...arrOfFlatPathsObj].sort((a, b) => {
+                const _a = a.path.toString().toLowerCase()
+                const _b = b.path.toString().toLowerCase()
+                return _a < _b ? -1 : 1
+              })
+            }
+          ]
     }
   }
 }
