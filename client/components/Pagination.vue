@@ -3,7 +3,7 @@
     <v-pagination
       :value="page"
       :length="Math.ceil(num / 10)"
-      :total-visible="4"
+      :total-visible="7"
       @input="setNumber"
     />
   </div>
