@@ -120,28 +120,25 @@ export default {
           return { path: e[0], method: elem[0], opeObj: elem[1] }
         })
       })
-      // sort ApiDoc by path(a->z) and group ApiDoc by UniqueTags
+      const sortedArrOfFlatPathsObj = [...arrOfFlatPathsObj].sort((a, b) => {
+        const _a = a.path.toString().toLowerCase()
+        const _b = b.path.toString().toLowerCase()
+        return _a < _b ? -1 : 1
+      })
+      // group ApiDoc by UniqueTags
       return this.uniqueTags.length > 1
         ? this.uniqueTags.map((tag) => {
             return {
               tag,
-              arrOfFlatPathsObj: [...arrOfFlatPathsObj]
-                .filter((element) => element.opeObj.tags.includes(tag))
-                .sort((a, b) => {
-                  const _a = a.path.toString().toLowerCase()
-                  const _b = b.path.toString().toLowerCase()
-                  return _a < _b ? -1 : 1
-                })
+              arrOfFlatPathsObj: sortedArrOfFlatPathsObj.filter((element) =>
+                element.opeObj.tags.includes(tag)
+              )
             }
           })
         : [
             {
-              tag: ' ',
-              arrOfFlatPathsObj: [...arrOfFlatPathsObj].sort((a, b) => {
-                const _a = a.path.toString().toLowerCase()
-                const _b = b.path.toString().toLowerCase()
-                return _a < _b ? -1 : 1
-              })
+              tag: '',
+              arrOfFlatPathsObj: sortedArrOfFlatPathsObj
             }
           ]
     }
