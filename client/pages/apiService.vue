@@ -18,7 +18,7 @@
         <h1>{{ apiDoc.info.title }}</h1>
         <div>{{ apiDoc.info.version }}</div>
       </div>
-      <div class="info-wrapper">
+      <div v-if="'description' in apiDoc.info" class="info-wrapper">
         <h2>Info</h2>
         <!-- eslint-disable-next-line vue/no-v-html -->
         <div v-html="$md.render(apiDoc.info.description)"></div>
