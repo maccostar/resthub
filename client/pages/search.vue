@@ -11,11 +11,13 @@
         <div class="number-of-hits">
           <span>{{ filterdApiList.length }}</span> apis found
         </div>
-        <Pagination
-          :num="filterdApiList.length"
-          :page="pageNumber"
-          @input="onReceivePage"
-        />
+        <div clss="pagination-wrapper">
+          <Pagination
+            :num="filterdApiList.length"
+            :page="pageNumber"
+            @input="onReceivePage"
+          />
+        </div>
       </div>
       <div class="search-result-body">
         <div
@@ -104,14 +106,17 @@ export default class extends Vue {
 
   initializeApiList() {
     this.searchedApilist = this.apilist
+    this.pageNumber = 1
   }
 
   searchApis(i: Api[]) {
     this.searchedApilist = i
+    this.pageNumber = 1
   }
 
   setFilterItems(i: string[]) {
     this.filterItems = i
+    this.pageNumber = 1
   }
 }
 </script>
@@ -130,10 +135,12 @@ export default class extends Vue {
 }
 
 .search-result-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   margin-bottom: 15px;
+}
+
+.pagination-wrapper {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .number-of-hits {
