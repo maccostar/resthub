@@ -147,7 +147,7 @@ export default class extends Vue {
   font-size: 16pt;
 }
 
-.v-pagination {
+.search-result-header .v-pagination {
   justify-content: flex-end;
 }
 
