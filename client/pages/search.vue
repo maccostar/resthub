@@ -65,23 +65,18 @@ export default class extends Vue {
   filterItems: string[] = []
 
   get uniqueCategories() {
-    type category = {
-      name: string
-      number: number
+    type SumByCategory = {
+      [x: string]: number
     }
-    const categorieList: string[] = this.searchedApilist
-      .flatMap((api) => api.category)
-      .filter((element, index, array) => array.indexOf(element) === index)
-
-    const uniqueCategories: category[] = categorieList.map((category) => {
-      return {
-        name: category,
-        number: this.searchedApilist.filter((e) =>
-          e.category.includes(category)
-        ).length
+    return this.searchedApilist.reduce((counter: SumByCategory, api) => {
+      if (!api.category.length) {
+        return counter
       }
-    })
-    return uniqueCategories
+      api.category.forEach((c: string) => {
+        c in counter ? (counter[c] += 1) : (counter[c] = 1)
+      })
+      return counter
+    }, {} as SumByCategory)
   }
 
   get paginationList() {
@@ -94,9 +89,7 @@ export default class extends Vue {
   get filterdApiList() {
     return this.filterItems.length
       ? this.searchedApilist.filter((api) =>
-          api.category.some((cate) =>
-            this.filterItems.some((item) => item === cate)
-          )
+          api.category.some((cate) => this.filterItems.includes(cate))
         )
       : this.searchedApilist
   }
