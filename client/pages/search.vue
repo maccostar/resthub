@@ -65,16 +65,23 @@ export default class extends Vue {
   filterItems: string[] = []
 
   get uniqueCategories() {
-    const uniqueCategories: { [key: string]: number } = {}
-
-    this.searchedApilist
+    type category = {
+      name: string
+      number: number
+    }
+    const categorieList: string[] = this.searchedApilist
       .flatMap((api) => api.category)
-      .forEach((category, _index, array) => {
-        uniqueCategories[category] = array.filter(
-          (item) => item === category
+      .filter((element, index, array) => array.indexOf(element) === index)
+
+    const uniqueCategories: category[] = categorieList.map((category) => {
+      return {
+        name: category,
+        number: this.searchedApilist.filter((e) =>
+          e.category.includes(category)
         ).length
-      })
-    return Object.entries(uniqueCategories)
+      }
+    })
+    return uniqueCategories
   }
 
   get paginationList() {
