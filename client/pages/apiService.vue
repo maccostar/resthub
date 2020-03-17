@@ -18,7 +18,7 @@
         <h1>{{ apiDoc.info.title }}</h1>
         <div>{{ apiDoc.info.version }}</div>
       </div>
-      <div class="info-wrapper">
+      <div v-if="'description' in apiDoc.info" class="info-wrapper">
         <h2>Info</h2>
         <!-- eslint-disable-next-line vue/no-v-html -->
         <div v-html="$md.render(apiDoc.info.description)"></div>
@@ -103,7 +103,8 @@ export default {
       const tagsInPathsObject = Object.entries(this.apiDoc.paths)
         .flatMap((endpoint) => Object.values(endpoint[1]))
         .flatMap((e) => e.tags)
-      const tagsInTagsObject = this.apiDoc.tags.map((e) => e.name)
+      const tagsInTagsObject =
+        'tags' in this.apiDoc ? this.apiDoc.tags.map((e) => e.name) : []
       // merge and get unique
       return tagsInTagsObject
         .concat(tagsInPathsObject)
@@ -119,19 +120,27 @@ export default {
           return { path: e[0], method: elem[0], opeObj: elem[1] }
         })
       })
-      // sort ApiDoc by path(a->z) and group ApiDoc by UniqueTags
-      return this.uniqueTags.map((tag) => {
-        return {
-          tag,
-          arrOfFlatPathsObj: [...arrOfFlatPathsObj]
-            .filter((element) => element.opeObj.tags.includes(tag))
-            .sort((a, b) => {
-              const _a = a.path.toString().toLowerCase()
-              const _b = b.path.toString().toLowerCase()
-              return _a < _b ? -1 : 1
-            })
-        }
+      const sortedArrOfFlatPathsObj = [...arrOfFlatPathsObj].sort((a, b) => {
+        const _a = a.path.toString().toLowerCase()
+        const _b = b.path.toString().toLowerCase()
+        return _a < _b ? -1 : 1
       })
+      // group ApiDoc by UniqueTags
+      return this.uniqueTags.length > 1
+        ? this.uniqueTags.map((tag) => {
+            return {
+              tag,
+              arrOfFlatPathsObj: sortedArrOfFlatPathsObj.filter((element) =>
+                element.opeObj.tags.includes(tag)
+              )
+            }
+          })
+        : [
+            {
+              tag: '',
+              arrOfFlatPathsObj: sortedArrOfFlatPathsObj
+            }
+          ]
     }
   }
 }
