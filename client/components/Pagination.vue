@@ -1,12 +1,10 @@
 <template>
-  <div>
-    <v-pagination
-      :value="page"
-      :length="Math.ceil(num / 10)"
-      :total-visible="4"
-      @input="setNumber"
-    />
-  </div>
+  <v-pagination
+    :value="page"
+    :length="Math.ceil(num / 10)"
+    :total-visible="7"
+    @input="setNumber"
+  />
 </template>
 
 <script lang="ts">

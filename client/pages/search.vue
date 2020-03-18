@@ -104,14 +104,17 @@ export default class extends Vue {
 
   initializeApiList() {
     this.searchedApilist = this.apilist
+    this.pageNumber = 1
   }
 
   searchApis(i: Api[]) {
     this.searchedApilist = i
+    this.pageNumber = 1
   }
 
   setFilterItems(i: string[]) {
     this.filterItems = i
+    this.pageNumber = 1
   }
 }
 </script>
@@ -130,13 +133,11 @@ export default class extends Vue {
 }
 
 .search-result-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   margin-bottom: 15px;
 }
 
 .number-of-hits {
+  margin-bottom: -35px;
   font-size: 13pt;
   font-weight: 500;
 }
@@ -144,6 +145,10 @@ export default class extends Vue {
 .number-of-hits > span {
   margin-right: 3px;
   font-size: 16pt;
+}
+
+.search-result-header .v-pagination {
+  justify-content: flex-end;
 }
 
 .search-result-body {
