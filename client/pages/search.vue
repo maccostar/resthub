@@ -65,18 +65,18 @@ export default class extends Vue {
   filterItems: string[] = []
 
   get uniqueCategories() {
-    type SumByCategory = {
-      [x: string]: number
-    }
-    return this.searchedApilist.reduce((counter: SumByCategory, api) => {
-      if (!api.category.length) {
+    return this.searchedApilist.reduce(
+      (counter: Record<string, number>, api) => {
+        if (!api.category.length) {
+          return counter
+        }
+        api.category.forEach((c: string) => {
+          c in counter ? (counter[c] += 1) : (counter[c] = 1)
+        })
         return counter
-      }
-      api.category.forEach((c: string) => {
-        c in counter ? (counter[c] += 1) : (counter[c] = 1)
-      })
-      return counter
-    }, {} as SumByCategory)
+      },
+      {}
+    )
   }
 
   get paginationList() {
