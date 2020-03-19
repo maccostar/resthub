@@ -70,7 +70,7 @@ export default class extends Vue {
         if (!api.category.length) {
           return counter
         }
-        api.category.forEach((c: string) => {
+        api.category.forEach((c) => {
           c in counter ? (counter[c] += 1) : (counter[c] = 1)
         })
         return counter
