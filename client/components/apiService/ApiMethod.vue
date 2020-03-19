@@ -52,8 +52,8 @@
   </div>
 </template>
 <script>
-import ApiParameters from '~/components/ApiParameters.vue'
-import ApiResponse from '~/components/ApiResponse.vue'
+import ApiParameters from '~/components/apiService/ApiParameters.vue'
+import ApiResponse from '~/components/apiService/ApiResponse.vue'
 
 // This script don't use TypeScript temporarily.
 export default {

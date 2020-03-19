@@ -15,7 +15,7 @@
   </div>
 </template>
 <script>
-import SchemaObj from '~/components/SchemaObj.vue'
+import SchemaObj from '~/components/apiService/SchemaObj.vue'
 
 export default {
   components: {

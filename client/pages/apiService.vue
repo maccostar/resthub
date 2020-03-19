@@ -12,6 +12,16 @@
       <p>Tags</p>
       <p>Servers</p>
       <p>Paths</p>
+      <div v-for="(group, gIndex) in flatPathsObjGroups" :key="gIndex">
+        <p>{{ group.tag }}</p>
+        <p
+          v-for="(flatPathsObj, index) in group.arrOfFlatPathsObj"
+          :key="index"
+        >
+          {{ flatPathsObj.method }}
+          {{ flatPathsObj.path }}
+        </p>
+      </div>
     </div>
     <div class="main">
       <div class="titele-wapper">
@@ -52,7 +62,7 @@
 <script>
 // This script don't use TypeScript temporarily.
 import SwaggerParser from 'swagger-parser'
-import ApiMethod from '~/components/ApiMethod.vue'
+import ApiMethod from '~/components/apiService/ApiMethod.vue'
 
 export default {
   components: {
@@ -180,5 +190,8 @@ h2 {
 }
 h3 {
   font-size: 24px;
+}
+p {
+  font-size: 12px;
 }
 </style>
