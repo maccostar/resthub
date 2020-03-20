@@ -60,7 +60,4 @@ export default {
 p {
   margin: 0;
 }
-table {
-  border-collapse: collapse;
-}
 </style>
