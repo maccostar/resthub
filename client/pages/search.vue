@@ -65,18 +65,17 @@ export default class extends Vue {
   filterItems: string[] = []
 
   get uniqueCategories() {
-    const uniqueCategories: { [key: string]: number } = {}
-
-    this.searchedApilist
-      .flatMap((api) => api.category)
-      .forEach((category, _index, array) => {
-        uniqueCategories[category] = array.filter(
-          (item) => item === category
-        ).length
-      })
-    return Object.entries(uniqueCategories).sort((a, b) =>
-      a[0].toLowerCase() < b[0].toLowerCase() ? -1 : 1
-    )
+    return Object.entries(
+      this.searchedApilist.reduce((counter: Record<string, number>, api) => {
+        if (!api.category.length) {
+          return counter
+        }
+        api.category.forEach((c) => {
+          c in counter ? (counter[c] += 1) : (counter[c] = 1)
+        })
+        return counter
+      }, {})
+    ).sort((a, b) => (a[0].toLowerCase() < b[0].toLowerCase() ? -1 : 1))
   }
 
   get paginationList() {
@@ -89,9 +88,7 @@ export default class extends Vue {
   get filterdApiList() {
     return this.filterItems.length
       ? this.searchedApilist.filter((api) =>
-          api.category.some((cate) =>
-            this.filterItems.some((item) => item === cate)
-          )
+          api.category.some((cate) => this.filterItems.includes(cate))
         )
       : this.searchedApilist
   }

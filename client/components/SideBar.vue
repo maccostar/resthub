@@ -19,12 +19,12 @@
 
 <script lang="ts">
 import { Component, Vue, Prop, Emit } from 'nuxt-property-decorator'
-import { Api } from '~/apis/apilist.json'
 
 @Component({})
 export default class extends Vue {
   selectedItems: string[] = []
-  @Prop({ type: Array, required: true }) categories!: Api[]
+
+  @Prop({ type: Array, required: true }) categories!: Record<string, number>
 
   @Emit()
   input(selectedItems: string[]) {
