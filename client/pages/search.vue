@@ -74,7 +74,9 @@ export default class extends Vue {
           (item) => item === category
         ).length
       })
-    return Object.entries(uniqueCategories)
+    return Object.entries(uniqueCategories).sort((a, b) =>
+      a[0].toLowerCase() < b[0].toLowerCase() ? -1 : 1
+    )
   }
 
   get paginationList() {
