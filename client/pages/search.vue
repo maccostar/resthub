@@ -143,7 +143,8 @@ export default class extends Vue {
 }
 
 .pagination-wrapper {
-  width: 400px;
+  width: 100%;
+  max-width: 400px;
 }
 
 .number-of-hits {
