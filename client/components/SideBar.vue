@@ -3,7 +3,7 @@
     <div class="category-title">Category</div>
     <div class="filter-buttons-container">
       <ul class="filter-buttons">
-        <li v-for="(item, index) in categories" :key="index">
+        <li v-for="(item, index) in Object.entries(categories)" :key="index">
           <input
             v-model="selectItems"
             class="checkbox"
@@ -19,12 +19,12 @@
 
 <script lang="ts">
 import { Component, Vue, Prop, Emit } from 'nuxt-property-decorator'
-import { Api } from '~/apis/apilist.json'
 
 @Component({})
 export default class extends Vue {
   selectedItems: string[] = []
-  @Prop({ type: Array, required: true }) categories!: Api[]
+
+  @Prop({ type: Object, required: true }) categories!: Record<string, number>
 
   @Emit()
   input(selectedItems: string[]) {

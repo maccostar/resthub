@@ -11,11 +11,13 @@
         <div class="number-of-hits">
           <span>{{ filterdApiList.length }}</span> apis found
         </div>
-        <Pagination
-          :num="filterdApiList.length"
-          :page="pageNumber"
-          @input="onReceivePage"
-        />
+        <div class="pagination-wrapper">
+          <Pagination
+            :num="filterdApiList.length"
+            :page="pageNumber"
+            @input="onReceivePage"
+          />
+        </div>
       </div>
       <div class="search-result-body">
         <div
@@ -65,16 +67,18 @@ export default class extends Vue {
   filterItems: string[] = []
 
   get uniqueCategories() {
-    const uniqueCategories: { [key: string]: number } = {}
-
-    this.searchedApilist
-      .flatMap((api) => api.category)
-      .forEach((category, _index, array) => {
-        uniqueCategories[category] = array.filter(
-          (item) => item === category
-        ).length
-      })
-    return Object.entries(uniqueCategories)
+    return this.searchedApilist.reduce(
+      (counter: Record<string, number>, api) => {
+        if (!api.category.length) {
+          return counter
+        }
+        api.category.forEach((c) => {
+          c in counter ? (counter[c] += 1) : (counter[c] = 1)
+        })
+        return counter
+      },
+      {}
+    )
   }
 
   get paginationList() {
@@ -87,9 +91,7 @@ export default class extends Vue {
   get filterdApiList() {
     return this.filterItems.length
       ? this.searchedApilist.filter((api) =>
-          api.category.some((cate) =>
-            this.filterItems.some((item) => item === cate)
-          )
+          api.category.some((cate) => this.filterItems.includes(cate))
         )
       : this.searchedApilist
   }
@@ -133,11 +135,19 @@ export default class extends Vue {
 }
 
 .search-result-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: 15px;
 }
 
+.pagination-wrapper {
+  width: 100%;
+  max-width: 400px;
+}
+
 .number-of-hits {
-  margin-bottom: -35px;
   font-size: 13pt;
   font-weight: 500;
 }
