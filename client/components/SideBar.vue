@@ -24,7 +24,7 @@ import { Component, Vue, Prop, Emit } from 'nuxt-property-decorator'
 export default class extends Vue {
   selectedItems: string[] = []
 
-  @Prop({ type: Array, required: true }) categories!: Record<string, number>
+  @Prop({ type: Array, required: true }) categories!: [string, number][]
 
   @Emit()
   input(selectedItems: string[]) {
