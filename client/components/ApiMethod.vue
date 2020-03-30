@@ -40,7 +40,7 @@
       </div>
       <div>
         <h6>Example: Request statement by Aspida</h6>
-        <example
+        <example-using-aspida
           :app-title="appTitle"
           :method="flatPathsObj.method"
           :path="flatPathsObj.path"
@@ -76,7 +76,7 @@
 <script>
 import ApiParameters from '~/components/ApiParameters.vue'
 import ApiRequestBody from '~/components/ApiRequestBody.vue'
-import Example from '~/components/Example.vue'
+import ExampleUsingAspida from '~/components/ExampleUsingAspida.vue'
 import ApiResponse from '~/components/ApiResponse.vue'
 
 // This script don't use TypeScript temporarily.
@@ -84,7 +84,7 @@ export default {
   components: {
     ApiParameters,
     ApiRequestBody,
-    Example,
+    ExampleUsingAspida,
     ApiResponse
   },
   props: {
