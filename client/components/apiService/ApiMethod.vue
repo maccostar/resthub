@@ -19,12 +19,34 @@
         <!-- eslint-disable-next-line vue/no-v-html -->
         <div v-html="$md.render(flatPathsObj.opeObj.description)" />
       </div>
-      <div v-if="existsKey(flatPathsObj.opeObj, 'parameters')">
+      <div>
         <h6>Parameters</h6>
-        <api-parameters :parameters="flatPathsObj.opeObj.parameters" />
+        <div v-if="existsKey(flatPathsObj.opeObj, 'parameters')">
+          <api-parameters :parameters="flatPathsObj.opeObj.parameters" />
+        </div>
+        <div v-else>
+          <p>No Parameters</p>
+        </div>
       </div>
       <div v-if="existsKey(flatPathsObj.opeObj, 'requestBody')">
         <h6>RequestBody</h6>
+        <api-request-body
+          :app-title="appTitle"
+          :method="flatPathsObj.method"
+          :path="flatPathsObj.path"
+          :parameters="flatPathsObj.opeObj.parameters || []"
+          :request-body="flatPathsObj.opeObj.requestBody"
+        />
+      </div>
+      <div>
+        <h6>Example: Request statement by Aspida</h6>
+        <example-using-aspida
+          :app-title="appTitle"
+          :method="flatPathsObj.method"
+          :path="flatPathsObj.path"
+          :parameters="flatPathsObj.opeObj.parameters || []"
+          :request-body="flatPathsObj.opeObj.requestBody"
+        />
       </div>
       <div v-if="existsKey(flatPathsObj.opeObj, 'responses')">
         <h6>Responses</h6>
@@ -52,6 +74,8 @@
   </div>
 </template>
 <script>
+import ApiRequestBody from '~/components/apiService/ApiRequestBody.vue'
+import ExampleUsingAspida from '~/components/apiService/ExampleUsingAspida.vue'
 import ApiParameters from '~/components/apiService/ApiParameters.vue'
 import ApiResponse from '~/components/apiService/ApiResponse.vue'
 
@@ -59,11 +83,17 @@ import ApiResponse from '~/components/apiService/ApiResponse.vue'
 export default {
   components: {
     ApiParameters,
+    ApiRequestBody,
+    ExampleUsingAspida,
     ApiResponse
   },
   props: {
     flatPathsObj: {
       type: Object,
+      required: true
+    },
+    appTitle: {
+      type: String,
       required: true
     }
   },

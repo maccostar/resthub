@@ -1,0 +1,1608 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+      "title": "EAI-NM REST interface",
+      "description": "API to access and handle the Number resources in EAI",
+      "termsOfService": "",
+      "contact": {
+          "email": "Hugo.Hedman@teliacompany.com"
+      },
+      "license": {
+          "name": "Apache 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+      },
+      "version": "v1.0"
+  },
+  "externalDocs": {
+      "description": "Find out more about Swagger",
+      "url": "http://swagger.io"
+  },
+  "servers": [
+      {
+          "url": "https://ow100eaimmpsit.ddc.teliasonera.net:7280/oss-core-rest/NumberManagement",
+          "description": "EAI Sandbox"
+      }
+  ],
+  "paths": {
+      "/v1.0/telephoneNumbers/{id}": {
+          "get": {
+              "tags": [
+                  "Telephone Numbers"
+              ],
+              "summary": "Get information about a specific Telephone Number",
+              "description": "Get information about a specific Phone Number",
+              "operationId": "getNumberInformationById",
+              "parameters": [
+                  {
+                      "$ref": "#/components/parameters/id"
+                  },
+                  {
+                      "$ref": "#/components/parameters/date"
+                  },
+                  {
+                      "$ref": "#/components/parameters/host"
+                  },
+                  {
+                      "$ref": "#/components/parameters/origin"
+                  },
+                  {
+                      "$ref": "#/components/parameters/xRequestId"
+                  },
+                  {
+                      "$ref": "#/components/parameters/sourceSystem"
+                  },
+                  {
+                      "$ref": "#/components/parameters/sourceUser"
+                  }
+              ],
+              "responses": {
+                  "200": {
+                      "description": "Successful operation, returns a number object",
+                      "headers": {
+                          "X-Request-Id": {
+                              "$ref": "#/components/headers/X-Request-Id"
+                          },
+                          "Date": {
+                              "$ref": "#/components/headers/Date"
+                          }
+                      },
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/telephoneNumber"
+                              }
+                          }
+                      }
+                  },
+                  "400": {
+                      "description": "Bad request, returned error code and error message give more details.\n* code 1, message \"Mandatory parameter [parameter_name] not provided\"\n* code 2, message \"Telephone number not found\"\n",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "type": "object",
+                                  "properties": {
+                                      "code": {
+                                          "type": "integer",
+                                          "description": "Error code",
+                                          "example": 2
+                                      },
+                                      "message": {
+                                          "type": "string",
+                                          "description": "Error message",
+                                          "example": "Telephone number not found"
+                                      }
+                                  }
+                              }
+                          }
+                      }
+                  }
+              }
+          },
+          "patch": {
+              "tags": [
+                  "Telephone Numbers"
+              ],
+              "summary": "Update Telephone Number attributes",
+              "description": "The method is designed for the use-cases;\n* Update Number-owning CRM. Use the numberOwningCrm parameter. Only accepted in WK status.\n* Set/modify/remove Reference Information. Use the referenceInformation parameter. Only accepted in WK status.\n* Set/modify/remove disconnection information. Use the disconnectReasonCode and disconnectReferenceNumber parameter. Only accepted in WK or AG status.\n* Modify Stop Dormancy Date. Use the stopDormancyDate parameter. Only accepted in AG status. New date must be today or later.\n",
+              "operationId": "updateNumber",
+              "parameters": [
+                  {
+                      "$ref": "#/components/parameters/id"
+                  },
+                  {
+                      "name": "numberOwningCrm",
+                      "in": "query",
+                      "description": "The CRM owning the number.",
+                      "example": "FrontOffice",
+                      "schema": {
+                          "type": "string",
+                          "nullable": true
+                      }
+                  },
+                  {
+                      "name": "referenceInformation",
+                      "in": "query",
+                      "description": "Optional information used for example to tie the number to a customers primary number.",
+                      "example": "0480-477000",
+                      "schema": {
+                          "type": "string",
+                          "nullable": true
+                      }
+                  },
+                  {
+                      "name": "disconnectReasonCode",
+                      "in": "query",
+                      "description": "Disconnect reason (service being moved or disconnected and has calls forwarded to a spoken announcement).",
+                      "example": 2,
+                      "schema": {
+                          "type": "integer",
+                          "nullable": true
+                      }
+                  },
+                  {
+                      "name": "disconnectReferenceNumber",
+                      "in": "query",
+                      "description": "If the number has latency information a refernce telephone number can be given for some latency codes and will be used in the spoken announcement. The telephone number shall be follow the legacy format with separator between area code and local number.",
+                      "example": "0761-353485",
+                      "schema": {
+                          "type": "string",
+                          "nullable": true
+                      }
+                  },
+                  {
+                      "name": "stopDormancyDate",
+                      "in": "query",
+                      "description": "Defines the date when a number will become released. Valid for numbers in Derived status Dormant.",
+                      "example": "2020-09-24",
+                      "schema": {
+                          "type": "string",
+                          "nullable": true
+                      }
+                  },
+                  {
+                      "$ref": "#/components/parameters/date"
+                  },
+                  {
+                      "$ref": "#/components/parameters/host"
+                  },
+                  {
+                      "$ref": "#/components/parameters/origin"
+                  },
+                  {
+                      "$ref": "#/components/parameters/xRequestId"
+                  },
+                  {
+                      "$ref": "#/components/parameters/sourceSystem"
+                  },
+                  {
+                      "$ref": "#/components/parameters/sourceUser"
+                  }
+              ],
+              "responses": {
+                  "200": {
+                      "description": "Successful operation, returns a number object",
+                      "headers": {
+                          "X-Request-Id": {
+                              "$ref": "#/components/headers/X-Request-Id"
+                          },
+                          "Date": {
+                              "$ref": "#/components/headers/Date"
+                          }
+                      },
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/telephoneNumber"
+                              }
+                          }
+                      }
+                  },
+                  "400": {
+                      "description": "Bad request, returned error code and error message give more details.\n* code 1, message \"Mandatory parameter [parameter_name] not provided\"\n* code 2, message \"Telephone number not found\"\n* code 20, message \"Provided Number Owning CRM does not exist\"\n* code 21, message \"Provided Disconnect Reason does not exist\"\n* code 22, message \"Provided Stop Dormancy Date in wrong format\"\n* code 23, message \"Action not allowed for number in this status\"\n",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "type": "object",
+                                  "properties": {
+                                      "code": {
+                                          "type": "integer",
+                                          "description": "Error code",
+                                          "example": 2
+                                      },
+                                      "message": {
+                                          "type": "string",
+                                          "description": "Error message",
+                                          "example": "Telephone number not found"
+                                      }
+                                  }
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+      },
+      "/v1.0/availableNumbers/": {
+          "get": {
+              "tags": [
+                  "Available Telephone Numbers"
+              ],
+              "summary": "Get list of available telephone numbers",
+              "description": "Get a requested amount of available numbers of a specified category and in a specifed region.",
+              "operationId": "getAvailableNumbers",
+              "parameters": [
+                  {
+                      "name": "region",
+                      "in": "query",
+                      "required": true,
+                      "description": "The region from which the available telephone numbers shall be selected.",
+                      "example": "0480",
+                      "schema": {
+                          "type": "string"
+                      }
+                  },
+                  {
+                      "name": "serviceCategory",
+                      "in": "query",
+                      "required": true,
+                      "description": "The service category of the requested telephone numbers.",
+                      "example": "PBX",
+                      "schema": {
+                          "type": "string"
+                      }
+                  },
+                  {
+                      "name": "amountOfNumbers",
+                      "in": "query",
+                      "description": "The requested amount of available numbers.",
+                      "example": 3,
+                      "schema": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 100,
+                          "default": 1
+                      }
+                  },
+                  {
+                      "name": "searchCriteria",
+                      "in": "query",
+                      "description": "An optional criteria to filter the available numbers returned. For example:\n* %00 => Only numbers ending with \"00\" is returned.\n* 477% => Only numbers starting with \"477\" is returned.\n* %22% => Only numbers containing \"22\" is returned.\n* 477%00 => Only numbers starting with \"477\" and ending with \"00\" is returned.\n",
+                      "example": "%00",
+                      "schema": {
+                          "type": "string"
+                      }
+                  },
+                  {
+                      "$ref": "#/components/parameters/date"
+                  },
+                  {
+                      "$ref": "#/components/parameters/host"
+                  },
+                  {
+                      "$ref": "#/components/parameters/origin"
+                  },
+                  {
+                      "$ref": "#/components/parameters/xRequestId"
+                  },
+                  {
+                      "$ref": "#/components/parameters/sourceSystem"
+                  },
+                  {
+                      "$ref": "#/components/parameters/sourceUser"
+                  }
+              ],
+              "responses": {
+                  "200": {
+                      "description": "Successful operation, returns a list of numbers available for booking (or reservation).",
+                      "headers": {
+                          "X-Request-Id": {
+                              "$ref": "#/components/headers/X-Request-Id"
+                          },
+                          "Date": {
+                              "$ref": "#/components/headers/Date"
+                          }
+                      },
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/listOfNumbers"
+                              }
+                          }
+                      }
+                  },
+                  "400": {
+                      "description": "Bad request, returned error code and error message give more details.\n* code 1, message \"Mandatory parameter [parameter_name] not provided\"\n* code 3, message \"The Service Category does not exist\"\n* code 4, message \"The Region does not exist\"\n* code 5, message \"Amount of requested numbers exceeds allowed value\"\n* code 6, message \"No available numbers matching the search criteria was found\"\n",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "type": "object",
+                                  "properties": {
+                                      "code": {
+                                          "type": "integer",
+                                          "description": "Error code",
+                                          "example": 6
+                                      },
+                                      "message": {
+                                          "type": "string",
+                                          "description": "Error message",
+                                          "example": "No available numbers matching the search criteria was found"
+                                      }
+                                  }
+                              }
+                          }
+                      }
+                  }
+              }
+          },
+          "patch": {
+              "tags": [
+                  "Available Telephone Numbers"
+              ],
+              "summary": "Return list of received available telephone numbers",
+              "description": "Return the part of the list of received numbers that is not booked or reserved.",
+              "operationId": "returnAvailableNumbers",
+              "parameters": [
+                  {
+                      "name": "numbers",
+                      "in": "query",
+                      "required": true,
+                      "description": "The list of available telephone numbers that shall be returned.",
+                      "schema": {
+                          "$ref": "#/components/schemas/listOfNumbers"
+                      }
+                  },
+                  {
+                      "$ref": "#/components/parameters/date"
+                  },
+                  {
+                      "$ref": "#/components/parameters/host"
+                  },
+                  {
+                      "$ref": "#/components/parameters/origin"
+                  },
+                  {
+                      "$ref": "#/components/parameters/xRequestId"
+                  },
+                  {
+                      "$ref": "#/components/parameters/sourceSystem"
+                  },
+                  {
+                      "$ref": "#/components/parameters/sourceUser"
+                  }
+              ],
+              "responses": {
+                  "200": {
+                      "description": "Successful operation.",
+                      "headers": {
+                          "X-Request-Id": {
+                              "$ref": "#/components/headers/X-Request-Id"
+                          },
+                          "Date": {
+                              "$ref": "#/components/headers/Date"
+                          }
+                      },
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "type": "object",
+                                  "properties": {
+                                      "code": {
+                                          "type": "integer",
+                                          "description": "Error code",
+                                          "example": 0
+                                      },
+                                      "message": {
+                                          "type": "string",
+                                          "description": "Error message",
+                                          "example": "All numbers successfully returned."
+                                      }
+                                  }
+                              }
+                          }
+                      }
+                  },
+                  "400": {
+                      "description": "Bad request, returned error code and error message give more details.\n* TBD\n",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "type": "object",
+                                  "properties": {
+                                      "code": {
+                                          "type": "integer",
+                                          "description": "Error code"
+                                      },
+                                      "message": {
+                                          "type": "string",
+                                          "description": "Error message"
+                                      }
+                                  }
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+      },
+      "/v1.0/telephoneNumbers/{id}/book/": {
+          "post": {
+              "tags": [
+                  "Telephone Numbers Life Cycle"
+              ],
+              "summary": "Book a Telephone Number",
+              "description": "Book a telephone number and register the number owning CRM.",
+              "operationId": "bookNumber",
+              "parameters": [
+                  {
+                      "$ref": "#/components/parameters/id"
+                  },
+                  {
+                      "$ref": "#/components/parameters/numberOwningCrm"
+                  },
+                  {
+                      "$ref": "#/components/parameters/date"
+                  },
+                  {
+                      "$ref": "#/components/parameters/host"
+                  },
+                  {
+                      "$ref": "#/components/parameters/origin"
+                  },
+                  {
+                      "$ref": "#/components/parameters/xRequestId"
+                  },
+                  {
+                      "$ref": "#/components/parameters/sourceSystem"
+                  },
+                  {
+                      "$ref": "#/components/parameters/sourceUser"
+                  },
+                  {
+                      "name": "referenceInformation",
+                      "in": "query",
+                      "description": "Optional information used for example to tie the number to a customers primary number.",
+                      "example": "0480-477000",
+                      "schema": {
+                          "type": "string"
+                      }
+                  }
+              ],
+              "responses": {
+                  "200": {
+                      "description": "Successful operation, returns the number object",
+                      "headers": {
+                          "X-Request-Id": {
+                              "$ref": "#/components/headers/X-Request-Id"
+                          },
+                          "Date": {
+                              "$ref": "#/components/headers/Date"
+                          }
+                      },
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/telephoneNumber"
+                              },
+                              "example": {
+                                  "name": "+4648025312",
+                                  "identifier": "0480-25312",
+                                  "owningOperator": "Telia",
+                                  "serviceCategory": "PBX",
+                                  "status": "AS",
+                                  "derivedStatus": "Booked",
+                                  "numberOwningCrm": "FrontOffice",
+                                  "startDormancyDate": "",
+                                  "stopDormancyDate": "",
+                                  "reservationInformation": {
+                                      "reservedUntilDate": "",
+                                      "reservationText": ""
+                                  },
+                                  "disconnectionInformation": {
+                                      "disconnectReason": "",
+                                      "disconnectReferenceNumber": ""
+                                  },
+                                  "referenceInformation": "0480-25300",
+                                  "numberCollections": {
+                                      "listId": "",
+                                      "ncCategory": "",
+                                      "primeNumber": ""
+                                  }
+                              }
+                          }
+                      }
+                  },
+                  "400": {
+                      "description": "Bad request, returned error code and error message give more details.\n* code 1, message \"Mandatory parameter [parameter_name] not provided\"\n* code 2, message \"Telephone number not found\"\n* code 7, message \"Requested transition not allowed for current telephone number status\"\n* code 20, message \"Provided Number Owning CRM does not exist\"\n",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "type": "object",
+                                  "properties": {
+                                      "code": {
+                                          "type": "integer",
+                                          "description": "Error code",
+                                          "example": 7
+                                      },
+                                      "message": {
+                                          "type": "string",
+                                          "description": "Error message",
+                                          "example": "Requested transition not allowed for current telephone number status"
+                                      }
+                                  }
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+      },
+      "/v1.0/telephoneNumbers/{id}/cancelBooking/": {
+          "post": {
+              "tags": [
+                  "Telephone Numbers Life Cycle"
+              ],
+              "summary": "Cancel booking of Telephone Number",
+              "description": "Cancel a previously booked telephone number.",
+              "operationId": "cancelNumber",
+              "parameters": [
+                  {
+                      "$ref": "#/components/parameters/id"
+                  },
+                  {
+                      "$ref": "#/components/parameters/date"
+                  },
+                  {
+                      "$ref": "#/components/parameters/host"
+                  },
+                  {
+                      "$ref": "#/components/parameters/origin"
+                  },
+                  {
+                      "$ref": "#/components/parameters/xRequestId"
+                  },
+                  {
+                      "$ref": "#/components/parameters/sourceSystem"
+                  },
+                  {
+                      "$ref": "#/components/parameters/sourceUser"
+                  }
+              ],
+              "responses": {
+                  "200": {
+                      "description": "Successful operation, returns the number object",
+                      "headers": {
+                          "X-Request-Id": {
+                              "$ref": "#/components/headers/X-Request-Id"
+                          },
+                          "Date": {
+                              "$ref": "#/components/headers/Date"
+                          }
+                      },
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/telephoneNumber"
+                              },
+                              "example": {
+                                  "name": "+4648025312",
+                                  "identifier": "0480-25312",
+                                  "owningOperator": "Telia",
+                                  "serviceCategory": "PBX",
+                                  "status": "AV",
+                                  "derivedStatus": "Available",
+                                  "numberOwningCrm": "",
+                                  "startDormancyDate": "",
+                                  "stopDormancyDate": "",
+                                  "reservationInformation": {
+                                      "reservedUntilDate": "",
+                                      "reservationText": ""
+                                  },
+                                  "disconnectionInformation": {
+                                      "disconnectReason": "",
+                                      "disconnectReferenceNumber": ""
+                                  },
+                                  "referenceInformation": "",
+                                  "numberCollections": {
+                                      "listId": "",
+                                      "ncCategory": "",
+                                      "primeNumber": ""
+                                  }
+                              }
+                          }
+                      }
+                  },
+                  "400": {
+                      "description": "Bad request, returned error code and error message give more details.\n* code 1, message \"Mandatory parameter [parameter_name] not provided\"\n* code 2, message \"Telephone number not found\"\n* code 7, message \"Requested transition not allowed for current telephone number status\"\n* code 30, message \"Telephone number locked, no status/attribute changes allowed\"\n",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "type": "object",
+                                  "properties": {
+                                      "code": {
+                                          "type": "integer",
+                                          "description": "Error code",
+                                          "example": 7
+                                      },
+                                      "message": {
+                                          "type": "string",
+                                          "description": "Error message",
+                                          "example": "Requested transition not allowed for current telephone number status"
+                                      }
+                                  }
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+      },
+      "/v1.0/telephoneNumbers/{id}/activate/": {
+          "post": {
+              "tags": [
+                  "Telephone Numbers Life Cycle"
+              ],
+              "summary": "Activate Telephone Number",
+              "description": "Activate a telephone number.",
+              "operationId": "activateNumber",
+              "parameters": [
+                  {
+                      "$ref": "#/components/parameters/id"
+                  },
+                  {
+                      "$ref": "#/components/parameters/numberOwningCrm"
+                  },
+                  {
+                      "$ref": "#/components/parameters/date"
+                  },
+                  {
+                      "$ref": "#/components/parameters/host"
+                  },
+                  {
+                      "$ref": "#/components/parameters/origin"
+                  },
+                  {
+                      "$ref": "#/components/parameters/xRequestId"
+                  },
+                  {
+                      "$ref": "#/components/parameters/sourceSystem"
+                  },
+                  {
+                      "$ref": "#/components/parameters/sourceUser"
+                  }
+              ],
+              "responses": {
+                  "200": {
+                      "description": "Successful operation, returns the number object",
+                      "headers": {
+                          "X-Request-Id": {
+                              "$ref": "#/components/headers/X-Request-Id"
+                          },
+                          "Date": {
+                              "$ref": "#/components/headers/Date"
+                          }
+                      },
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/telephoneNumber"
+                              },
+                              "example": {
+                                  "name": "+4648025312",
+                                  "identifier": "0480-25312",
+                                  "owningOperator": "Telia",
+                                  "serviceCategory": "PBX",
+                                  "status": "WK",
+                                  "derivedStatus": "Assigned",
+                                  "numberOwningCrm": "FrontOffice",
+                                  "startDormancyDate": "",
+                                  "stopDormancyDate": "",
+                                  "reservationInformation": {
+                                      "reservedUntilDate": "",
+                                      "reservationText": ""
+                                  },
+                                  "disconnectionInformation": {
+                                      "disconnectReason": "",
+                                      "disconnectReferenceNumber": ""
+                                  },
+                                  "referenceInformation": "0480-25300",
+                                  "numberCollections": {
+                                      "listId": "",
+                                      "ncCategory": "",
+                                      "primeNumber": ""
+                                  }
+                              }
+                          }
+                      }
+                  },
+                  "400": {
+                      "description": "Bad request, returned error code and error message give more details.\n* code 1, message \"Mandatory parameter [parameter_name] not provided\"\n* code 2, message \"Telephone number ot found\"\n* code 7, message \"Requested transition not allowed for current telephone number status\"\n* code 20, message \"Provided Number Owning CRM does not exist\"\n* code 30, message \"Telephone number locked, no status/attribute changes allowed\"\n",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "type": "object",
+                                  "properties": {
+                                      "code": {
+                                          "type": "integer",
+                                          "description": "Error code",
+                                          "example": 7
+                                      },
+                                      "message": {
+                                          "type": "string",
+                                          "description": "Error message",
+                                          "example": "Requested transition not allowed for current telephone number status"
+                                      }
+                                  }
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+      },
+      "/v1.0/telephoneNumbers/{id}/deactivate/": {
+          "post": {
+              "tags": [
+                  "Telephone Numbers Life Cycle"
+              ],
+              "summary": "Deactivate Telephone Number",
+              "description": "Deactivate a telephone number.",
+              "operationId": "deactivateNumber",
+              "parameters": [
+                  {
+                      "$ref": "#/components/parameters/id"
+                  },
+                  {
+                      "$ref": "#/components/parameters/date"
+                  },
+                  {
+                      "$ref": "#/components/parameters/host"
+                  },
+                  {
+                      "$ref": "#/components/parameters/origin"
+                  },
+                  {
+                      "$ref": "#/components/parameters/xRequestId"
+                  },
+                  {
+                      "$ref": "#/components/parameters/sourceSystem"
+                  },
+                  {
+                      "$ref": "#/components/parameters/sourceUser"
+                  },
+                  {
+                      "name": "portingInformation",
+                      "in": "query",
+                      "description": "If the deactivation includes porting this attribute needs to be given.",
+                      "required": false,
+                      "schema": {
+                          "type": "string"
+                      }
+                  }
+              ],
+              "responses": {
+                  "200": {
+                      "description": "Successful operation, returns the number object",
+                      "headers": {
+                          "X-Request-Id": {
+                              "$ref": "#/components/headers/X-Request-Id"
+                          },
+                          "Date": {
+                              "$ref": "#/components/headers/Date"
+                          }
+                      },
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/telephoneNumber"
+                              },
+                              "example": {
+                                  "name": "+4648025312",
+                                  "identifier": "0480-25312",
+                                  "owningOperator": "Telia",
+                                  "serviceCategory": "INDIVIDUAL",
+                                  "status": "AG",
+                                  "derivedStatus": "Dormant",
+                                  "numberOwningCrm": "",
+                                  "startDormancyDate": "2019-09-24",
+                                  "stopDormancyDate": "2020-04-24",
+                                  "reservationInformation": {
+                                      "reservedUntilDate": "",
+                                      "reservationText": ""
+                                  },
+                                  "disconnectionInformation": {
+                                      "disconnectReason": "",
+                                      "disconnectReferenceNumber": ""
+                                  },
+                                  "referenceInformation": "",
+                                  "numberCollections": {
+                                      "listId": "",
+                                      "ncCategory": "",
+                                      "primeNumber": ""
+                                  }
+                              }
+                          }
+                      }
+                  },
+                  "400": {
+                      "description": "Bad request, returned error code and error message give more details.\n* code 1, message \"Mandatory parameter [parameter_name] not provided\"\n* code 2, message \"Telephone number ot found\"\n* code 7, message \"Requested transition not allowed for current telephone number status\"\n* code 24, message \"Porting flag can only be Y or N\"\n* code 30, message \"Telephone number locked, no status/attribute changes allowed\"\n",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "type": "object",
+                                  "properties": {
+                                      "code": {
+                                          "type": "integer",
+                                          "description": "Error code",
+                                          "example": 7
+                                      },
+                                      "message": {
+                                          "type": "string",
+                                          "description": "Error message",
+                                          "example": "Requested transition not allowed for current telephone number status"
+                                      }
+                                  }
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+      },
+      "/v1.0/telephoneNumbers/{id}/reserve/": {
+          "post": {
+              "tags": [
+                  "Telephone Numbers Life Cycle"
+              ],
+              "summary": "Reserve Telephone Number",
+              "description": "Reserve a telephone number during a specified time with an optional reservation text describing the reason for reservation. The reservation time may be extended and/or the reservation text updated buy a subsequent reservation request on an already reserved telephone number",
+              "operationId": "reserveNumber",
+              "parameters": [
+                  {
+                      "$ref": "#/components/parameters/id"
+                  },
+                  {
+                      "name": "reservedUntil",
+                      "in": "query",
+                      "description": "The reserved until date. The parameter is required for the initial reservation of a telephone number but optional for a subsequent call where only the reservationText is updated. The parameter can be used on an already reserved number to extend the reservation period.",
+                      "example": "2019-09-24",
+                      "schema": {
+                          "type": "string"
+                      }
+                  },
+                  {
+                      "name": "reservationText",
+                      "in": "query",
+                      "description": "Optional free text describing the reason for reservation. The parameter can be used on an already reserved number to update the reservation text.",
+                      "example": "Walters Trä AB",
+                      "schema": {
+                          "type": "string"
+                      }
+                  },
+                  {
+                      "$ref": "#/components/parameters/date"
+                  },
+                  {
+                      "$ref": "#/components/parameters/host"
+                  },
+                  {
+                      "$ref": "#/components/parameters/origin"
+                  },
+                  {
+                      "$ref": "#/components/parameters/xRequestId"
+                  },
+                  {
+                      "$ref": "#/components/parameters/sourceSystem"
+                  },
+                  {
+                      "$ref": "#/components/parameters/sourceUser"
+                  }
+              ],
+              "responses": {
+                  "200": {
+                      "description": "Successful operation, returns the number object",
+                      "headers": {
+                          "X-Request-Id": {
+                              "$ref": "#/components/headers/X-Request-Id"
+                          },
+                          "Date": {
+                              "$ref": "#/components/headers/Date"
+                          }
+                      },
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/telephoneNumber"
+                              },
+                              "example": {
+                                  "name": "+4648025312",
+                                  "identifier": "0480-25312",
+                                  "owningOperator": "Telia",
+                                  "serviceCategory": "INDIVIDUAL",
+                                  "status": "AV",
+                                  "derivedStatus": "Reserved",
+                                  "numberOwningCrm": "",
+                                  "startDormancyDate": "",
+                                  "stopDormancyDate": "",
+                                  "reservationInformation": {
+                                      "reservedUntilDate": "2019-09-24",
+                                      "reservationText": "620909-7575"
+                                  },
+                                  "disconnectionInformation": {
+                                      "disconnectReason": "",
+                                      "disconnectReferenceNumber": ""
+                                  },
+                                  "referenceInformation": "",
+                                  "numberCollections": {
+                                      "listId": "",
+                                      "ncCategory": "",
+                                      "primeNumber": ""
+                                  }
+                              }
+                          }
+                      }
+                  },
+                  "400": {
+                      "description": "Bad request, returned error code and error message give more details.\n* code 1, message \"Mandatory parameter [parameter_name] not provided\"\n* code 2, message \"Telephone number not found\"\n* code 7, message \"Requested transition not allowed for current telephone number status\"\n* code 8, message \"Reservation date must be given in the request\"\n* code 9, message \"Number can not be reserved as it is part of a number collection\"\n* code 10, message \"Reserved Until Date invalid\"\n",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "type": "object",
+                                  "properties": {
+                                      "code": {
+                                          "type": "integer",
+                                          "description": "Error code",
+                                          "example": 2
+                                      },
+                                      "message": {
+                                          "type": "string",
+                                          "description": "Error message",
+                                          "example": "Telephone number not found"
+                                      }
+                                  }
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+      },
+      "/v1.0/telephoneNumbers/{identifier}/preparePortIn/": {
+          "post": {
+              "tags": [
+                  "Telephone Numbers Life Cycle"
+              ],
+              "summary": "Release or Create Telephone Number",
+              "description": "Release a ported Telia telephone number from aging or if no number can be found, create a new Non-Telia telephone number. The number will be reserved for 30 days with reservation text \"Port-In\".",
+              "operationId": "preparePortInNumber",
+              "parameters": [
+                  {
+                      "name": "identifier",
+                      "in": "path",
+                      "description": "The telephone number Identifier in the form of area code - local number (0480-25312).",
+                      "example": "0480-25312",
+                      "required": true,
+                      "schema": {
+                          "type": "string"
+                      }
+                  },
+                  {
+                      "$ref": "#/components/parameters/date"
+                  },
+                  {
+                      "$ref": "#/components/parameters/host"
+                  },
+                  {
+                      "$ref": "#/components/parameters/origin"
+                  },
+                  {
+                      "$ref": "#/components/parameters/xRequestId"
+                  },
+                  {
+                      "$ref": "#/components/parameters/sourceSystem"
+                  },
+                  {
+                      "$ref": "#/components/parameters/sourceUser"
+                  }
+              ],
+              "responses": {
+                  "200": {
+                      "description": "Successful operation, returns the number object",
+                      "headers": {
+                          "X-Request-Id": {
+                              "$ref": "#/components/headers/X-Request-Id"
+                          },
+                          "Date": {
+                              "$ref": "#/components/headers/Date"
+                          }
+                      },
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/telephoneNumber"
+                              },
+                              "example": {
+                                  "name": 4648025312,
+                                  "identifier": "0480-25312",
+                                  "owningOperator": "Non-Telia",
+                                  "serviceCategory": "INDIVIDUAL",
+                                  "status": "AV",
+                                  "derivedStatus": "Reserved",
+                                  "numberOwningCrm": "",
+                                  "startDormancyDate": "",
+                                  "stopDormancyDate": "",
+                                  "reservationInformation": {
+                                      "reservedUntilDate": "2019-09-24",
+                                      "reservationText": "Port-In"
+                                  },
+                                  "disconnectionInformation": {
+                                      "disconnectReason": "",
+                                      "disconnectReferenceNumber": ""
+                                  },
+                                  "referenceInformation": "",
+                                  "numbercollections": ""
+                              }
+                          }
+                      }
+                  },
+                  "400": {
+                      "description": "Bad request, returned error code and error message give more details.\n* code 1, message \"Mandatory parameter [parameter_name] not provided\"\n* code 7, message \"Requested transition not allowed for current telephone number status\"\n",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "type": "object",
+                                  "properties": {
+                                      "code": {
+                                          "type": "integer",
+                                          "description": "Error code",
+                                          "example": 5
+                                      },
+                                      "message": {
+                                          "type": "string",
+                                          "description": "Error message",
+                                          "example": "Requested Telephone number status update not allowed in current status"
+                                      }
+                                  }
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+      },
+      "/v1.0/telephoneNumbers/{id}/lock/": {
+          "post": {
+              "tags": [
+                  "Telephone Numbers Life Cycle"
+              ],
+              "summary": "Lock Telephone Number",
+              "description": "Lock a telephone number from status or attribute updates by other client systems.",
+              "operationId": "lockNumber",
+              "parameters": [
+                  {
+                      "$ref": "#/components/parameters/id"
+                  },
+                  {
+                      "name": "lock",
+                      "in": "query",
+                      "description": "The requested lock status for the number. Can be \"on\" or \"off\".",
+                      "required": true,
+                      "example": "on",
+                      "schema": {
+                          "type": "string"
+                      }
+                  },
+                  {
+                      "name": "lockingClientName",
+                      "in": "query",
+                      "description": "The client system locking the number.",
+                      "required": true,
+                      "example": "XPORT",
+                      "schema": {
+                          "type": "string"
+                      }
+                  },
+                  {
+                      "$ref": "#/components/parameters/date"
+                  },
+                  {
+                      "$ref": "#/components/parameters/host"
+                  },
+                  {
+                      "$ref": "#/components/parameters/origin"
+                  },
+                  {
+                      "$ref": "#/components/parameters/xRequestId"
+                  },
+                  {
+                      "$ref": "#/components/parameters/sourceSystem"
+                  },
+                  {
+                      "$ref": "#/components/parameters/sourceUser"
+                  }
+              ],
+              "responses": {
+                  "200": {
+                      "description": "Successful operation, returns the number object",
+                      "headers": {
+                          "X-Request-Id": {
+                              "$ref": "#/components/headers/X-Request-Id"
+                          },
+                          "Date": {
+                              "$ref": "#/components/headers/Date"
+                          }
+                      },
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/telephoneNumber"
+                              },
+                              "example": {
+                                  "name": 4648025312,
+                                  "identifier": "0480-25312",
+                                  "owningOperator": "Non-Telia",
+                                  "serviceCategory": "INDIVIDUAL",
+                                  "status": "AV",
+                                  "derivedStatus": "Reserved",
+                                  "numberOwningCrm": "",
+                                  "startDormancyDate": "",
+                                  "stopDormancyDate": "",
+                                  "reservationInformation": {
+                                      "reservedUntilDate": "2019-09-24",
+                                      "reservationText": "Port-In"
+                                  },
+                                  "disconnectionInformation": {
+                                      "disconnectReason": "",
+                                      "disconnectReferenceNumber": ""
+                                  },
+                                  "referenceInformation": "",
+                                  "numbercollections": ""
+                              }
+                          }
+                      }
+                  },
+                  "400": {
+                      "description": "Bad request, returned error code and error message give more details.\n* code 1, message \"Mandatory parameter [parameter_name] not provided\"           \n* code 7, message \"Requested transition not allowed for current telephone number status\"\n",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "type": "object",
+                                  "properties": {
+                                      "code": {
+                                          "type": "integer",
+                                          "description": "Error code",
+                                          "example": 5
+                                      },
+                                      "message": {
+                                          "type": "string",
+                                          "description": "Error message",
+                                          "example": "Requested Telephone number status update not allowed in current status"
+                                      }
+                                  }
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+      },
+      "/v1.0/numberCollections/{listId}/": {
+          "get": {
+              "tags": [
+                  "Number Collections"
+              ],
+              "summary": "Get number collection details",
+              "description": ".",
+              "operationId": "getNumberCollectionDetails",
+              "parameters": [
+                  {
+                      "name": "listId",
+                      "in": "path",
+                      "description": "The list id of the Number Collection.",
+                      "example": "NC1234567",
+                      "required": true,
+                      "schema": {
+                          "type": "string"
+                      }
+                  },
+                  {
+                      "$ref": "#/components/parameters/date"
+                  },
+                  {
+                      "$ref": "#/components/parameters/host"
+                  },
+                  {
+                      "$ref": "#/components/parameters/origin"
+                  },
+                  {
+                      "$ref": "#/components/parameters/xRequestId"
+                  },
+                  {
+                      "$ref": "#/components/parameters/sourceSystem"
+                  },
+                  {
+                      "$ref": "#/components/parameters/sourceUser"
+                  }
+              ],
+              "responses": {
+                  "200": {
+                      "description": "Successful operation, returns the number collection object",
+                      "headers": {
+                          "X-Request-Id": {
+                              "$ref": "#/components/headers/X-Request-Id"
+                          },
+                          "Date": {
+                              "$ref": "#/components/headers/Date"
+                          }
+                      },
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/numberCollection"
+                              }
+                          }
+                      }
+                  },
+                  "400": {
+                      "description": "Bad request, returned error code and error message give more details.\n* code 1, message \"Mandatory parameter [parameter_name] not provided\"           \n* code 11, message \"Number Collection not found\"\n",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "type": "object",
+                                  "properties": {
+                                      "code": {
+                                          "type": "integer",
+                                          "description": "Error code",
+                                          "example": 11
+                                      },
+                                      "message": {
+                                          "type": "string",
+                                          "description": "Error message",
+                                          "example": "Number Collection not found"
+                                      }
+                                  }
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+      }
+  },
+  "components": {
+      "headers": {
+          "X-Request-Id": {
+              "description": "Every request must contain UUID of the request, filled by caller and reported in the response. Used for logging purposes. This must be generated in any new request of the caller and never reused.",
+              "schema": {
+                  "type": "string"
+              },
+              "example": "f058ebd6-02f7-4d3f-942e-904344e8cde5"
+          },
+          "Date": {
+              "description": "The date and time that the message was sent. ISO 8601 format with time zone",
+              "schema": {
+                  "type": "string"
+              },
+              "example": "2019-12-02T10:11:12.123Z"
+          }
+      },
+      "parameters": {
+          "sourceSystem": {
+              "in": "header",
+              "name": "Source-System",
+              "description": "The system sending the request.",
+              "example": "FrontOffice",
+              "schema": {
+                  "type": "string"
+              }
+          },
+          "date": {
+              "in": "header",
+              "name": "Date",
+              "description": "The date and time that the message was sent. On ISO 8601 format, including timezone",
+              "example": "2019-11-17T01:02:03Z",
+              "schema": {
+                  "type": "string"
+              }
+          },
+          "host": {
+              "in": "header",
+              "name": "Host",
+              "description": "The domain name of the server, and the TCP port number on which the server is listening. The port number may be omitted if the port is the standard port for the service requested.",
+              "example": "http://ow100eaimmpsit.ddc.teliasonera.net",
+              "schema": {
+                  "type": "string"
+              }
+          },
+          "origin": {
+              "in": "header",
+              "name": "Origin",
+              "description": "It’s added by the user agent to describe the contexts that caused the user agent to initiate an HTTP request",
+              "example": "http://ow100eaimmpsit.ddc.teliasonera.net",
+              "schema": {
+                  "type": "string"
+              }
+          },
+          "sourceUser": {
+              "in": "header",
+              "name": "Source-User",
+              "description": "The user name (TCAD id) causing the request to be sent from the client system.",
+              "example": "goan55",
+              "schema": {
+                  "type": "string"
+              }
+          },
+          "xRequestId": {
+              "in": "header",
+              "name": "X-Request-Id",
+              "description": "Every request must contain UUID of the request, filled by caller and reported in the response. Used for logging purposes. This must be generated in any new request of the caller and never reused.",
+              "example": "f058ebd6-02f7-4d3f-942e-904344e8cde5",
+              "schema": {
+                  "type": "string"
+              }
+          },
+          "xCorrelationId": {
+              "in": "header",
+              "name": "X-Correlation-Id",
+              "description": "Mandatory on for asynchronous messages, this is used across several call to refer to same asynchronous server order/work order. Will be passed on by EAI if the request trigger other API calls, and might have been passed on from another request. This should live as long as there are active processes triggered by calls.",
+              "example": "f058ebd6-02f7-4d3f-942e-904344e8cde5",
+              "schema": {
+                  "type": "string"
+              }
+          },
+          "id": {
+              "name": "id",
+              "in": "path",
+              "description": "The telephone number expressed in one out of two formats. Either the telephone number Identifier in the form of area code - local number (0480-25312) or the telephone number Name in the E.164 format (+4648025312)",
+              "example": "0480-25312",
+              "required": true,
+              "schema": {
+                  "type": "string"
+              }
+          },
+          "orderInformation": {
+              "name": "orderInformation",
+              "in": "query",
+              "description": "The order number or other reason for booking the number. This information will be available in the number history for the number.",
+              "example": "12345678",
+              "schema": {
+                  "type": "string"
+              }
+          },
+          "numberOwningCrm": {
+              "name": "numberOwningCrm",
+              "in": "query",
+              "description": "The CRM handling the number.",
+              "example": "FrontOffice",
+              "required": true,
+              "schema": {
+                  "type": "string"
+              }
+          }
+      },
+      "schemas": {
+          "telephoneNumber": {
+              "type": "object",
+              "properties": {
+                  "name": {
+                      "type": "string",
+                      "description": "ISO E.164 format of the phone number.",
+                      "example": "+4648025312"
+                  },
+                  "identifier": {
+                      "type": "string",
+                      "description": "Telephone number in legacy format with separator between area code and local number.",
+                      "example": "0480-25312"
+                  },
+                  "owningOperator": {
+                      "type": "string",
+                      "enum": [
+                          "Telia",
+                          "Non-Telia"
+                      ],
+                      "description": "Shows if the number belongs to Telia or if it is an imported number. Values \"Telia\" or \"Non-Telia\""
+                  },
+                  "serviceCategory": {
+                      "type": "string",
+                      "description": "The Service Category for the number.",
+                      "example": "PBX"
+                  },
+                  "status": {
+                      "type": "string",
+                      "enum": [
+                          "AV",
+                          "AS",
+                          "WK",
+                          "AG",
+                          "UA"
+                      ],
+                      "description": "Core number status."
+                  },
+                  "derivedStatus": {
+                      "type": "string",
+                      "enum": [
+                          "Unassigned",
+                          "Reserved",
+                          "Booked",
+                          "Assigned",
+                          "Dormant",
+                          "Ported"
+                      ],
+                      "description": "Human readable number status."
+                  },
+                  "numberOwningCrm": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "The CRM handling the number.",
+                      "example": "FrontOffice"
+                  },
+                  "startDormancyDate": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Defines the date when a number was set to Dormant. Valid for numbers in Derived status Dormant.",
+                      "example": "2019-09-24"
+                  },
+                  "stopDormancyDate": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Defines the date when a number will become released. Valid for numbers in Derived status Dormant.",
+                      "example": "2020-09-24"
+                  },
+                  "reservationInformation": {
+                      "type": "object",
+                      "properties": {
+                          "reservedUntilDate": {
+                              "type": "string",
+                              "nullable": true,
+                              "description": "Defines the date when a number is removed from reservation. Valid for numbers in Derived status Reserve",
+                              "example": "2019-12-31"
+                          },
+                          "reservationText": {
+                              "type": "string",
+                              "nullable": true,
+                              "description": "Defines the reason for the reservation",
+                              "example": "Walters Trä AB"
+                          }
+                      }
+                  },
+                  "disconnectionInformation": {
+                      "type": "object",
+                      "properties": {
+                          "disconnectReason": {
+                              "type": "string",
+                              "nullable": true,
+                              "description": "Shows if the number has latency information (service being moved or disconnected and has calls forwarded to a spoken announcement).",
+                              "example": "Terminated with reference number"
+                          },
+                          "disconnectReasonCode": {
+                              "type": "string",
+                              "nullable": true,
+                              "description": "Numerical representation of the disconnect reason. No disconnect reason is represented by null.",
+                              "example": "1"
+                          },
+                          "disconnectReferenceNumber": {
+                              "type": "string",
+                              "nullable": true,
+                              "description": "If the number has latency information a refernce telephone number can be given for some latency codes and will be used in the spoken announcement. The telephone number shall be follow the legacy format with separator between area code and local number.",
+                              "example": "0761-353485"
+                          }
+                      }
+                  },
+                  "referenceInformation": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Can be used to tie a number to another number, the customers main number.",
+                      "example": "0480-252525"
+                  },
+                  "numberCollections": {
+                      "type": "array",
+                      "items": {
+                          "type": "object",
+                          "properties": {
+                              "listId": {
+                                  "type": "string",
+                                  "description": "The name of the number collection.",
+                                  "example": "NC0001234"
+                              },
+                              "ncCategory": {
+                                  "type": "string",
+                                  "description": "The category of the number collection.",
+                                  "example": "ROUTING CASE"
+                              },
+                              "primeNumber": {
+                                  "type": "string",
+                                  "description": "The number collection primary number in legacy format with a separator between area code and local number.",
+                                  "example": "0480-477000"
+                              }
+                          }
+                      }
+                  }
+              }
+          },
+          "numberCollection": {
+              "type": "object",
+              "properties": {
+                  "listId": {
+                      "type": "string",
+                      "description": "The name of the number collection.",
+                      "example": "NC0001234"
+                  },
+                  "ncCategory": {
+                      "type": "string",
+                      "description": "The type of Number Collection.",
+                      "example": "ROUTING CASE"
+                  },
+                  "status": {
+                      "type": "string",
+                      "description": "Number Collection status.",
+                      "example": "InUse"
+                  },
+                  "primeNumber": {
+                      "type": "string",
+                      "description": "The prime number related to the Number Collection",
+                      "example": "0480-477000"
+                  },
+                  "listOwner": {
+                      "type": "string",
+                      "description": "The organisation Id of the company owning the Number Collection",
+                      "example": "620909-7575"
+                  },
+                  "listCustomer": {
+                      "type": "string",
+                      "description": "The name of the company owning the Number Collection",
+                      "example": "Walters Trä AB"
+                  },
+                  "customerOrderNumber": {
+                      "type": "string",
+                      "description": "The order number related to the Number Collection",
+                      "example": "8361425"
+                  },
+                  "dueDate": {
+                      "type": "string",
+                      "format": "date",
+                      "description": "The date when the number collection will be automatically removed.",
+                      "example": "2020-03-11"
+                  },
+                  "numbers": {
+                      "type": "array",
+                      "items": {
+                          "type": "object",
+                          "properties": {
+                              "identifier": {
+                                  "type": "string",
+                                  "description": "Telephone number in legacy format with separator between area code and local number.",
+                                  "example": "0480-25312"
+                              },
+                              "derivedStatus": {
+                                  "type": "string",
+                                  "description": "Telephone number Derived Status.",
+                                  "example": "Assigned"
+                              },
+                              "exceptionFlag": {
+                                  "type": "string",
+                                  "enum": [
+                                      "Y",
+                                      "N"
+                                  ],
+                                  "description": "The exception flag of the number.",
+                                  "example": "N"
+                              }
+                          }
+                      }
+                  }
+              }
+          },
+          "listOfNumbers": {
+              "type": "array",
+              "items": {
+                  "type": "string",
+                  "description": "Telephone number in legacy format with separator between area code and local number."
+              },
+              "example": [
+                  "0480-25312",
+                  "0480-25314",
+                  "0480-25315"
+              ]
+          }
+      }
+  }
+}

@@ -75,7 +75,7 @@ export default {
       const setProperties = (obj) => {
         const required = 'required' in obj ? obj.required : []
         return Object.entries(obj.properties).map((e) => {
-          // example(s)・enum等はまだ実装していないß
+          // example(s)・enum等はまだ実装していない
           return {
             name: e[0],
             required: required.includes(e[0]),
@@ -85,7 +85,7 @@ export default {
           }
         })
       }
-      return 'properties' in obj ? setProperties(obj) : obj
+      return 'properties' in obj ? setProperties(obj) : [obj]
     },
     mergeAllOf(arr) {
       return arr.flatMap((obj) => {
