@@ -67,8 +67,8 @@ export default class extends Vue {
   filterItems: string[] = []
 
   get uniqueCategories() {
-    return this.searchedApilist.reduce(
-      (counter: Record<string, number>, api) => {
+    return Object.entries(
+      this.searchedApilist.reduce((counter: Record<string, number>, api) => {
         if (!api.category.length) {
           return counter
         }
@@ -76,9 +76,8 @@ export default class extends Vue {
           c in counter ? (counter[c] += 1) : (counter[c] = 1)
         })
         return counter
-      },
-      {}
-    )
+      }, {})
+    ).sort((a, b) => (a[0].toLowerCase() < b[0].toLowerCase() ? -1 : 1))
   }
 
   get paginationList() {
