@@ -7,6 +7,7 @@
   </div>
 </template>
 <script>
+import getExampleTextUsingAspida from '~/utils/getExampleTextUsingAspida.js'
 export default {
   props: {
     // serversを後で追加する
@@ -123,7 +124,7 @@ export default {
     if (hasRequestBody) {
       const mediaTypeObj = Object.entries(this.requestBody.content)[0][1]
       const schemaObj = 'schema' in mediaTypeObj ? mediaTypeObj.schema : {}
-      const obj = this.$getExampleData(schemaObj)
+      const obj = getExampleTextUsingAspida(schemaObj)
       this.constStr = this.getConstStr(obj, '\n\t')
       this.argumentStr = this.getArgumentStr(obj, '\n\t\t\t')
     }

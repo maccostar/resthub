@@ -1,4 +1,4 @@
-const getExampleData = (schemaObj) => {
+export default (schemaObj) => {
   const getExampleObj = (obj) => {
     return judgeFuncAndObject(obj).map((e) => {
       return !e.hasNest
@@ -16,11 +16,6 @@ const getExampleData = (schemaObj) => {
   const obj = getExampleObj(schemaObj)
 
   return obj
-}
-
-// eslint-disable-next-line no-empty-pattern
-export default ({}, inject) => {
-  inject('getExampleData', getExampleData)
 }
 
 const dummyArr = [{ name: 'err', type: 'err', hasNest: false }]
