@@ -1,21 +1,27 @@
 <template>
   <div class="search-container">
-    <side-bar :apilist="apilist" />
+    <side-bar :categories="uniqueCategories" @input="setFilterItems" />
     <div class="contents-area">
       <search-bar
-        :apilist="searchedApilist"
+        :apilist="filterdApiList"
         :initialize-api-list="initializeApiList"
         :search-apis="searchApis"
       />
       <div class="search-result-header">
         <div class="number-of-hits">
-          <span>{{ searchedApilist.length }}</span> apis found
+          <span>{{ filterdApiList.length }}</span> apis found
         </div>
-        <Pagination />
+        <div class="pagination-wrapper">
+          <Pagination
+            :num="filterdApiList.length"
+            :page="pageNumber"
+            @input="onReceivePage"
+          />
+        </div>
       </div>
       <div class="search-result-body">
         <div
-          v-for="(api, index) in searchedApilist"
+          v-for="(api, index) in paginationList"
           :key="index"
           class="card-wrapper"
         >
@@ -27,7 +33,11 @@
           </nuxt-link>
         </div>
       </div>
-      <Pagination />
+      <Pagination
+        :num="filterdApiList.length"
+        :page="pageNumber"
+        @input="onReceivePage"
+      />
     </div>
   </div>
 </template>
@@ -40,6 +50,8 @@ import Card from '~/components/Card.vue'
 import SideBar from '~/components/SideBar.vue'
 import SearchBar from '~/components/SearchBar.vue'
 
+const PAGE_ITEM_NUMBER = 10
+
 @Component({
   components: { Pagination, Card, SideBar, SearchBar },
   async asyncData() {
@@ -50,24 +62,60 @@ import SearchBar from '~/components/SearchBar.vue'
 })
 export default class extends Vue {
   apilist: Api[] = []
+  pageNumber = 1
   searchedApilist: Api[] = []
+  filterItems: string[] = []
 
   get uniqueCategories() {
-    return this.searchedApilist
-      .flatMap((api) => api.category)
-      .filter((element, index, array) => array.indexOf(element) === index)
+    return Object.entries(
+      this.searchedApilist.reduce((counter: Record<string, number>, api) => {
+        if (!api.category.length) {
+          return counter
+        }
+        api.category.forEach((c) => {
+          c in counter ? (counter[c] += 1) : (counter[c] = 1)
+        })
+        return counter
+      }, {})
+    ).sort((a, b) => (a[0].toLowerCase() < b[0].toLowerCase() ? -1 : 1))
+  }
+
+  get paginationList() {
+    return this.filterdApiList.slice(
+      PAGE_ITEM_NUMBER * this.pageNumber - PAGE_ITEM_NUMBER,
+      PAGE_ITEM_NUMBER * this.pageNumber
+    )
+  }
+
+  get filterdApiList() {
+    return this.filterItems.length
+      ? this.searchedApilist.filter((api) =>
+          api.category.some((cate) => this.filterItems.includes(cate))
+        )
+      : this.searchedApilist
   }
 
   created() {
     this.initializeApiList()
   }
 
+  onReceivePage(page: number) {
+    this.pageNumber = page
+  }
+
   initializeApiList() {
     this.searchedApilist = this.apilist
+    this.pageNumber = 1
   }
 
   searchApis(i: Api[]) {
     this.searchedApilist = i
+    this.pageNumber = 1
+  }
+
+  setFilterItems(i: string[]) {
+    this.filterItems = i
+    this.pageNumber = 1
   }
 }
 </script>
@@ -87,9 +135,15 @@ export default class extends Vue {
 
 .search-result-header {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 15px;
+}
+
+.pagination-wrapper {
+  width: 100%;
+  max-width: 400px;
 }
 
 .number-of-hits {
@@ -100,6 +154,10 @@ export default class extends Vue {
 .number-of-hits > span {
   margin-right: 3px;
   font-size: 16pt;
+}
+
+.search-result-header .v-pagination {
+  justify-content: flex-end;
 }
 
 .search-result-body {

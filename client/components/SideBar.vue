@@ -3,8 +3,14 @@
     <div class="category-title">Category</div>
     <div class="filter-buttons-container">
       <ul class="filter-buttons">
-        <li v-for="(item, index) in uniqueCategories" :key="index">
-          <input class="checkbox" type="checkbox" name="category" />{{ item }}
+        <li v-for="(item, index) in categories" :key="index">
+          <input
+            v-model="selectItems"
+            class="checkbox"
+            type="checkbox"
+            name="category"
+            :value="item[0]"
+          />{{ item[0] }} ({{ item[1] }})
         </li>
       </ul>
     </div>
@@ -12,18 +18,26 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'nuxt-property-decorator'
-import { Api } from '~/apis/apilist.json'
+import { Component, Vue, Prop, Emit } from 'nuxt-property-decorator'
 
 @Component({})
 export default class extends Vue {
-  @Prop({ type: Array, required: true }) apilist!: Api[]
+  selectedItems: string[] = []
 
-  get uniqueCategories() {
-    return this.apilist
-      .map((api) => api.category)
-      .flat()
-      .filter((element, index, array) => array.indexOf(element) === index)
+  @Prop({ type: Array, required: true }) categories!: [string, number][]
+
+  @Emit()
+  input(selectedItems: string[]) {
+    return selectedItems
+  }
+
+  get selectItems() {
+    return this.selectedItems
+  }
+
+  set selectItems(value: string[]) {
+    this.selectedItems = value
+    this.input(this.selectedItems)
   }
 }
 </script>

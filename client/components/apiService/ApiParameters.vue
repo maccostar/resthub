@@ -72,6 +72,7 @@ export default {
 table {
   font-size: 13px;
   table-layout: fixed;
+  border-collapse: collapse;
 }
 p {
   margin: 0;

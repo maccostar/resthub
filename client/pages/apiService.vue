@@ -1,24 +1,14 @@
 <template>
   <div class="api-service-container">
-    <div class="side">
-      <v-text-field
-        label="Keywords"
-        prepend-inner-icon="mdi-magnify"
-        single-line
-        outlined
-        dense
-      />
-      <p>Info</p>
-      <p>Tags</p>
-      <p>Servers</p>
-      <p>Paths</p>
+    <div class="side" style="overflow-y: auto;">
+      <api-side-bar :flat-paths-obj-groups="flatPathsObjGroups" />
     </div>
     <div class="main">
       <div class="titele-wapper">
         <h1>{{ apiDoc.info.title }}</h1>
         <div>{{ apiDoc.info.version }}</div>
       </div>
-      <div class="info-wrapper">
+      <div v-if="'description' in apiDoc.info" class="info-wrapper">
         <h2>Info</h2>
         <!-- eslint-disable-next-line vue/no-v-html -->
         <div v-html="$md.render(apiDoc.info.description)"></div>
@@ -38,9 +28,11 @@
         <div v-for="(group, gIndex) in flatPathsObjGroups" :key="gIndex">
           <h3 class="api-tag">{{ group.tag }}</h3>
           <div
-            v-for="(flatPathsObj, index) in group.arrOfFlatPathsObj"
-            :key="index"
+            v-for="(obj, idx) in group.arrOfFlatPathsObj"
+            :id="`${gIndex}_${idx}`"
+            :key="idx"
           >
+            <span class="heading" />
             <api-method
               :flat-paths-obj="flatPathsObj"
               :app-title="apiDoc.info.title"
@@ -51,14 +43,15 @@
     </div>
   </div>
 </template>
-
 <script>
 // This script don't use TypeScript temporarily.
 import SwaggerParser from 'swagger-parser'
-import ApiMethod from '~/components/ApiMethod.vue'
+import ApiSideBar from '~/components/apiService/ApiSideBar.vue'
+import ApiMethod from '~/components/apiService/ApiMethod.vue'
 
 export default {
   components: {
+    ApiSideBar,
     ApiMethod
   },
   async asyncData({ route }) {
@@ -106,7 +99,8 @@ export default {
       const tagsInPathsObject = Object.entries(this.apiDoc.paths)
         .flatMap((endpoint) => Object.values(endpoint[1]))
         .flatMap((e) => e.tags)
-      const tagsInTagsObject = this.apiDoc.tags.map((e) => e.name)
+      const tagsInTagsObject =
+        'tags' in this.apiDoc ? this.apiDoc.tags.map((e) => e.name) : []
       // merge and get unique
       return tagsInTagsObject
         .concat(tagsInPathsObject)
@@ -122,24 +116,31 @@ export default {
           return { path: e[0], method: elem[0], opeObj: elem[1] }
         })
       })
-      // sort ApiDoc by path(a->z) and group ApiDoc by UniqueTags
-      return this.uniqueTags.map((tag) => {
-        return {
-          tag,
-          arrOfFlatPathsObj: [...arrOfFlatPathsObj]
-            .filter((element) => element.opeObj.tags.includes(tag))
-            .sort((a, b) => {
-              const _a = a.path.toString().toLowerCase()
-              const _b = b.path.toString().toLowerCase()
-              return _a < _b ? -1 : 1
-            })
-        }
+      const sortedArrOfFlatPathsObj = [...arrOfFlatPathsObj].sort((a, b) => {
+        const _a = a.path.toString().toLowerCase()
+        const _b = b.path.toString().toLowerCase()
+        return _a < _b ? -1 : 1
       })
+      // group ApiDoc by UniqueTags
+      return this.uniqueTags.length > 1
+        ? this.uniqueTags.map((tag) => {
+            return {
+              tag,
+              arrOfFlatPathsObj: sortedArrOfFlatPathsObj.filter((element) =>
+                element.opeObj.tags.includes(tag)
+              )
+            }
+          })
+        : [
+            {
+              tag: '',
+              arrOfFlatPathsObj: sortedArrOfFlatPathsObj
+            }
+          ]
     }
   }
 }
 </script>
-
 <style scoped>
 .api-service-container {
   /* Caution: `min-height: 100vh` does not work in IE 11 */
@@ -147,20 +148,17 @@ export default {
   text-align: left;
   background: #fff;
 }
-
 .side {
   position: fixed;
   top: 65px;
   left: 0;
   z-index: 1;
-
   width: 200px;
   height: 100%;
   padding: 30px 20px;
   background: #fff;
   border-right: thin solid #c0c0c0;
 }
-
 .main {
   padding: 30px;
   margin: 65px 0 60px 200px;
@@ -168,11 +166,17 @@ export default {
 .api-methods-wapper {
   padding: 20px 0;
 }
-
 h2 {
   font-size: 28px;
 }
 h3 {
   font-size: 24px;
+}
+.heading::before {
+  display: block;
+  height: 6rem;
+  margin-top: -6rem;
+  visibility: hidden;
+  content: '';
 }
 </style>

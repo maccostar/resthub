@@ -74,10 +74,10 @@
   </div>
 </template>
 <script>
-import ApiParameters from '~/components/ApiParameters.vue'
-import ApiRequestBody from '~/components/ApiRequestBody.vue'
-import ExampleUsingAspida from '~/components/ExampleUsingAspida.vue'
-import ApiResponse from '~/components/ApiResponse.vue'
+import ApiRequestBody from '~/components/apiService/ApiRequestBody.vue'
+import ExampleUsingAspida from '~/components/apiService/ExampleUsingAspida.vue'
+import ApiParameters from '~/components/apiService/ApiParameters.vue'
+import ApiResponse from '~/components/apiService/ApiResponse.vue'
 
 // This script don't use TypeScript temporarily.
 export default {
@@ -169,6 +169,7 @@ export default {
 table {
   font-size: 13px;
   table-layout: fixed;
+  border-collapse: collapse;
 }
 p {
   margin: 0;
