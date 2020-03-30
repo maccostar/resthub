@@ -8,7 +8,7 @@
       outlined
       dense
       return-object
-    ></v-select>
+    />
     <!-- mediaTypeObjectレイヤーのexample(s)は今時点では取り扱わない -->
     <table style="width: 100%;">
       <tbody>
