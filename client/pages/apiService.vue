@@ -33,10 +33,7 @@
             :key="idx"
           >
             <span class="heading" />
-            <api-method
-              :flat-paths-obj="flatPathsObj"
-              :app-title="apiDoc.info.title"
-            />
+            <api-method :flat-paths-obj="obj" :app-title="apiDoc.info.title" />
           </div>
         </div>
       </div>
