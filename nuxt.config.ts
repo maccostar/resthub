@@ -42,12 +42,7 @@ const config: Configuration = {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [
-    '~/plugins/axios',
-    '~/plugins/api',
-    '~/plugins/vue-highlight',
-    '~/plugins/resthub/getExampleData.js'
-  ],
+  plugins: ['~/plugins/axios', '~/plugins/api', '~/plugins/vue-highlight'],
   /*
    ** Nuxt.js dev-modules
    */
