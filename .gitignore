@@ -92,3 +92,4 @@ sw.*
 ### Misc
 **/apis/$*.ts
 types/*
+client/static/openApiSpec/*.json
