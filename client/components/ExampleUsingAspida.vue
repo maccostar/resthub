@@ -50,7 +50,7 @@ export default {
         .map((elem, index) => {
           return index === 0
             ? elem
-            : elem.charAt(0).toUpperCase() + elem.slice(1)
+            : `${elem.charAt(0).toUpperCase()}${elem.slice(1)}`
         })
         .join('')
     },
@@ -113,7 +113,7 @@ export default {
         if (dataParameters.length > 1) {
           return `${method[0]}{ ${dataParameters} \n\t}${method[1]}`
         }
-        return method[0] + method[1]
+        return `${method[0]}${method[1]}`
       }
 
       return getParams()
