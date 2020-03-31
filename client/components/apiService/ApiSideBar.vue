@@ -43,14 +43,19 @@
             v-for="(flatPathsObj, idx) in group.arrOfFlatPathsObj"
             :key="idx"
             link
-            class="pointpo pl-3"
+            class="pl-3"
             :href="`#${gIndex}_${idx}`"
           >
-            <div class="endpoint">
+            <div class="endpoint-wrapper">
               <div :class="`method ${flatPathsObj.method}`">
                 {{ flatPathsObj.method }}
               </div>
-              <div class="text--darken-1-grey">{{ flatPathsObj.path }}</div>
+              <div
+                class="endpoint-url text--darken-1-grey"
+                :name="flatPathsObj.path"
+              >
+                {{ flatPathsObj.path }}
+              </div>
             </div>
           </v-list-item>
         </v-list-group>
@@ -86,15 +91,20 @@ export default {
 .search-bar {
   margin: 20px 20px 0;
 }
-.endpoint {
+.endpoint-wrapper {
   display: flex;
+  width: 100%;
   margin-bottom: 0;
   margin-left: 20px;
   font-size: 0.8125rem;
   white-space: nowrap;
 }
 .method {
-  width: 35px;
+  min-width: 35px;
+}
+.endpoint-url {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .get {
   color: #5c81ff;
