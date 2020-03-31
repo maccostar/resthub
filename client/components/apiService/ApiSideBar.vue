@@ -77,7 +77,7 @@ export default {
   top: 65px;
   left: 0;
   z-index: 1;
-  width: 250px;
+  width: 300px;
   height: calc(100% - 65px);
   overflow-y: scroll;
   color: #646464;
@@ -94,6 +94,8 @@ export default {
 .endpoint-anker {
   display: inline-block;
   min-width: 100%;
+  min-height: 35px;
+
   font-size: 0.8125rem;
   white-space: nowrap;
 }

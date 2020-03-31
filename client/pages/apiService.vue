@@ -148,7 +148,7 @@ export default {
 
 .main {
   padding: 30px;
-  margin: 65px 0 60px 250px;
+  margin: 65px 0 60px 300px;
 }
 .api-methods-wapper {
   padding: 20px 0;
