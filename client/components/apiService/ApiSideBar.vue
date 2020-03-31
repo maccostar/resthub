@@ -39,25 +39,21 @@
               <v-list-item-title>{{ group.tag }}</v-list-item-title>
             </v-list-item-content>
           </template>
-          <v-list-item
-            v-for="(flatPathsObj, idx) in group.arrOfFlatPathsObj"
-            :key="idx"
-            link
-            class="pl-3"
-            :href="`#${gIndex}_${idx}`"
-          >
-            <div class="endpoint-wrapper">
-              <div :class="`method ${flatPathsObj.method}`">
+          <div class="endpoint-wrapper">
+            <v-list-item
+              v-for="(flatPathsObj, idx) in group.arrOfFlatPathsObj"
+              :key="idx"
+              class="pl-3 endpoint-anker"
+              :href="`#${gIndex}_${idx}`"
+            >
+              <span :class="`action-name ${flatPathsObj.method}`">
                 {{ flatPathsObj.method }}
-              </div>
-              <div
-                class="endpoint-url text--darken-1-grey"
-                :name="flatPathsObj.path"
-              >
+              </span>
+              <span class="text--darken-1-grey" :name="flatPathsObj.path">
                 {{ flatPathsObj.path }}
-              </div>
-            </div>
-          </v-list-item>
+              </span>
+            </v-list-item>
+          </div>
         </v-list-group>
       </v-list-group>
     </v-list>
@@ -83,7 +79,7 @@ export default {
   z-index: 1;
   width: 250px;
   height: calc(100% - 65px);
-  overflow: scroll;
+  overflow-y: scroll;
   color: #646464;
   background: #fff;
   border-right: thin solid #c0c0c0;
@@ -92,19 +88,22 @@ export default {
   margin: 20px 20px 0;
 }
 .endpoint-wrapper {
-  display: flex;
   width: 100%;
-  margin-bottom: 0;
-  margin-left: 20px;
+  overflow-x: scroll;
+}
+.endpoint-anker {
+  display: inline-block;
+  min-width: 100%;
   font-size: 0.8125rem;
   white-space: nowrap;
 }
-.method {
-  min-width: 35px;
+.endpoint-anker > span {
+  vertical-align: -webkit-baseline-middle;
 }
-.endpoint-url {
-  overflow: hidden;
-  text-overflow: ellipsis;
+.action-name {
+  display: inline-block;
+  min-width: 35px;
+  margin-left: 20px;
 }
 .get {
   color: #5c81ff;
