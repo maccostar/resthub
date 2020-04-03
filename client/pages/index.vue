@@ -72,7 +72,7 @@ export default class extends Vue {
         if (!api.category.length) {
           return counter
         }
-        api.category.forEach((c) => {
+        api.category.forEach((c: string) => {
           c in counter ? (counter[c] += 1) : (counter[c] = 1)
         })
         return counter
@@ -90,7 +90,7 @@ export default class extends Vue {
   get filterdApiList() {
     return this.filterItems.length
       ? this.searchedApilist.filter((api) =>
-          api.category.some((cate) => this.filterItems.includes(cate))
+          api.category.some((c: string) => this.filterItems.includes(c))
         )
       : this.searchedApilist
   }

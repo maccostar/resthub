@@ -3,7 +3,7 @@
     <v-text-field
       v-model="keyword"
       label="Please enter keywords to search APIs"
-      placeholder="service: owner:"
+      placeholder="title: baseURL:"
       prepend-inner-icon="mdi-magnify"
       single-line
       outlined
@@ -28,10 +28,10 @@ export default class extends Vue {
   searchedApilist: Api[] = []
 
   async search() {
-    const searchKey = ['service:', 'owner:']
-    const searchWords = { service: '', owner: '', other: '' }
-    const serviceHead = this.keyword.indexOf(searchKey[0])
-    const ownerHead = this.keyword.indexOf(searchKey[1])
+    const searchKey = ['title:', 'baseURL:']
+    const searchWords = { title: '', baseURL: '', other: '' }
+    const titleHead = this.keyword.indexOf(searchKey[0])
+    const baseUrlHead = this.keyword.indexOf(searchKey[1])
     const wordLength = this.keyword.length
 
     await this.initializeApiList()
@@ -40,37 +40,41 @@ export default class extends Vue {
       return
     }
 
-    if (serviceHead === -1 && ownerHead === -1) {
+    if (titleHead === -1 && baseUrlHead === -1) {
       searchWords.other = this.pickWord(0, wordLength)
     }
-    if (serviceHead !== -1) {
-      searchWords.service = this.pickWord(
-        serviceHead + searchKey[0].length,
-        ownerHead === -1
+    if (titleHead !== -1) {
+      searchWords.title = this.pickWord(
+        titleHead + searchKey[0].length,
+        baseUrlHead === -1
           ? wordLength
-          : ownerHead < serviceHead
+          : baseUrlHead < titleHead
           ? wordLength
-          : ownerHead
+          : baseUrlHead
       )
     }
-    if (ownerHead !== -1) {
-      searchWords.owner = this.pickWord(
-        ownerHead + searchKey[1].length,
-        serviceHead === -1
+    if (baseUrlHead !== -1) {
+      searchWords.baseURL = this.pickWord(
+        baseUrlHead + searchKey[1].length,
+        titleHead === -1
           ? wordLength
-          : serviceHead < ownerHead
+          : titleHead < baseUrlHead
           ? wordLength
-          : serviceHead
+          : titleHead
       )
     }
 
     this.searchedApilist = this.apilist.filter((i) => {
+      const jointUrls: string = i.baseURL
+        .map((e) => ('url' in e ? e.url : ''))
+        .join('')
+      // console.log(jointUrls)
       if (
         searchWords.other
-          ? i.service.match(RegExp(searchWords.other, 'i')) ||
-            i.owner.match(RegExp(searchWords.other, 'i'))
-          : i.service.match(RegExp(searchWords.service, 'i')) &&
-            i.owner.match(RegExp(searchWords.owner, 'i'))
+          ? i.title.match(RegExp(searchWords.other, 'i')) ||
+            jointUrls.match(RegExp(searchWords.other, 'i'))
+          : i.title.match(RegExp(searchWords.title, 'i')) &&
+            jointUrls.match(RegExp(searchWords.baseURL, 'i'))
       )
         return i
     })
