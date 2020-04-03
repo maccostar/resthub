@@ -145,20 +145,10 @@ export default {
   text-align: left;
   background: #fff;
 }
-.side {
-  position: fixed;
-  top: 65px;
-  left: 0;
-  z-index: 1;
-  width: 200px;
-  height: 100%;
-  padding: 30px 20px;
-  background: #fff;
-  border-right: thin solid #c0c0c0;
-}
+
 .main {
   padding: 30px;
-  margin: 65px 0 60px 200px;
+  margin: 65px 0 60px 300px;
 }
 .api-methods-wapper {
   padding: 20px 0;
