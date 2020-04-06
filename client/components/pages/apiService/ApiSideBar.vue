@@ -9,52 +9,44 @@
       dense
     />
     <v-list dense>
-      <v-list-group prepend-icon="">
+      <v-list-item>
+        <v-list-item-title>Info</v-list-item-title>
+      </v-list-item>
+      <v-list-item>
+        <v-list-item-title>Tags</v-list-item-title>
+      </v-list-item>
+      <v-list-item>
+        <v-list-item-title>Servers</v-list-item-title>
+      </v-list-item>
+      <v-list-item>
+        <v-list-item-title>Paths</v-list-item-title>
+      </v-list-item>
+      <v-list-group
+        v-for="(group, gIndex) in flatPathsObjGroups"
+        :key="gIndex"
+        no-action
+        sub-group
+      >
         <template v-slot:activator>
-          <v-list-item-title>Info</v-list-item-title>
+          <v-list-item-content>
+            <v-list-item-title>{{ group.tag }}</v-list-item-title>
+          </v-list-item-content>
         </template>
-      </v-list-group>
-      <v-list-group prepend-icon="">
-        <template v-slot:activator>
-          <v-list-item-title>Tags</v-list-item-title>
-        </template>
-      </v-list-group>
-      <v-list-group prepend-icon="">
-        <template v-slot:activator>
-          <v-list-item-title>Servers</v-list-item-title>
-        </template>
-      </v-list-group>
-      <v-list-group prepend-icon="">
-        <template v-slot:activator>
-          <v-list-item-title>Paths</v-list-item-title>
-        </template>
-        <v-list-group
-          v-for="(group, gIndex) in flatPathsObjGroups"
-          :key="gIndex"
-          no-action
-          sub-group
-        >
-          <template v-slot:activator>
-            <v-list-item-content>
-              <v-list-item-title>{{ group.tag }}</v-list-item-title>
-            </v-list-item-content>
-          </template>
-          <div class="endpoint-wrapper">
-            <v-list-item
-              v-for="(flatPathsObj, idx) in group.arrOfFlatPathsObj"
-              :key="idx"
-              class="pl-3 endpoint-anker"
-              :href="`#${gIndex}_${idx}`"
-            >
-              <span :class="`action-name ${flatPathsObj.method}`">
-                {{ flatPathsObj.method }}
-              </span>
-              <span class="text--darken-1-grey" :name="flatPathsObj.path">
-                {{ flatPathsObj.path }}
-              </span>
-            </v-list-item>
-          </div>
-        </v-list-group>
+        <div class="endpoint-wrapper">
+          <v-list-item
+            v-for="(flatPathsObj, idx) in group.arrOfFlatPathsObj"
+            :key="idx"
+            class="pl-3 endpoint-anker"
+            :href="`#${gIndex}_${idx}`"
+          >
+            <span :class="`action-name ${flatPathsObj.method}`">
+              {{ flatPathsObj.method }}
+            </span>
+            <span class="text--darken-1-grey" :name="flatPathsObj.path">
+              {{ flatPathsObj.path }}
+            </span>
+          </v-list-item>
+        </div>
       </v-list-group>
     </v-list>
   </div>
@@ -95,7 +87,6 @@ export default {
   display: inline-block;
   min-width: 100%;
   min-height: 35px;
-
   font-size: 0.8125rem;
   white-space: nowrap;
 }
@@ -118,5 +109,8 @@ export default {
 }
 .delete {
   color: #ffadad;
+}
+.patch {
+  color: #a956f6;
 }
 </style>
