@@ -74,10 +74,10 @@
   </div>
 </template>
 <script>
-import ApiRequestBody from '~/components/apiService/ApiRequestBody.vue'
-import ExampleUsingAspida from '~/components/apiService/ExampleUsingAspida.vue'
-import ApiParameters from '~/components/apiService/ApiParameters.vue'
-import ApiResponse from '~/components/apiService/ApiResponse.vue'
+import ApiRequestBody from '~/components/pages/apiService/ApiRequestBody.vue'
+import ExampleUsingAspida from '~/components/pages/apiService/ExampleUsingAspida.vue'
+import ApiParameters from '~/components/pages/apiService/ApiParameters.vue'
+import ApiResponse from '~/components/pages/apiService/ApiResponse.vue'
 
 // This script don't use TypeScript temporarily.
 export default {

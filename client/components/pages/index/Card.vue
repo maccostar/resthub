@@ -5,10 +5,12 @@
         <div class="logo">
           <img :src="api.icon" alt="" />
         </div>
-        <div class="apiname">{{ api.service }}</div>
+        <div class="apiname">{{ api.title }}</div>
       </div>
-      <div class="api-discription">
-        {{ api.discription }}
+      <div class="api-urls">
+        <div v-for="(url, index) in api.baseURL" :key="index">
+          {{ url.url }}
+        </div>
       </div>
       <div class="api-category">
         <span v-for="category in api.category" :key="category">
@@ -16,8 +18,7 @@
         </span>
       </div>
       <div class="api-details">
-        <div class="owner">{{ api.owner }}</div>
-        <div class="updated">updated: {{ api.updated }}</div>
+        <!-- <div class="updated">updated: {{ api.updated }}</div> -->
       </div>
     </div>
     <div class="api-items-right">
@@ -68,7 +69,7 @@ export default class extends Vue {
   border-radius: 5px;
 }
 
-.api-discription {
+.api-urls {
   margin-bottom: 10px;
 }
 
@@ -94,7 +95,7 @@ export default class extends Vue {
   margin-right: 20px;
 }
 
-.api-details .owner {
+/* .api-details .baseurl {
   font-size: 12pt;
-}
+} */
 </style>
