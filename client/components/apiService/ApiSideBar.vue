@@ -18,7 +18,7 @@
       <v-list-item>
         <v-list-item-title>Servers</v-list-item-title>
       </v-list-item>
-      <v-list-item prepend-icon="">
+      <v-list-item>
         <v-list-item-title>Paths</v-list-item-title>
       </v-list-item>
       <v-list-group
