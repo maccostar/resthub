@@ -40,17 +40,25 @@
     </div>
   </div>
 </template>
-<script>
-// This script don't use TypeScript temporarily.
+<script lang="ts">
+import { Component, Vue } from 'nuxt-property-decorator'
 import SwaggerParser from 'swagger-parser'
+import { OpenAPIV3 } from 'openapi-types'
 import ApiSideBar from '~/components/pages/apiService/ApiSideBar.vue'
 import ApiMethod from '~/components/pages/apiService/ApiMethod.vue'
 
-export default {
-  components: {
-    ApiSideBar,
-    ApiMethod
-  },
+type FlatPathsObjGroup = {
+  tag: string
+  arrOfFlatPathsObj: FlatPathsObj[]
+}
+type FlatPathsObj = {
+  path: string
+  method: string
+  opeObj: OpenAPIV3.OperationObject
+}
+
+@Component({
+  components: { ApiSideBar, ApiMethod },
   async asyncData({ route }) {
     const apiServiceId = route.query.apiServiceId
     const openapi = await SwaggerParser.parse(
@@ -60,82 +68,87 @@ export default {
       }
     )
     return { apiDoc: openapi }
-  },
-  data() {
-    return {
-      apiDoc: {}
-    }
-  },
-  computed: {
-    replacedApiDoc() {
-      const replace = (str) => {
-        // DQ means DoubleQuotation
-        const idxOf2ndDQ = str.indexOf(`"`, 1)
-        const refObj = str.slice(1, idxOf2ndDQ).split('/')
-        const refPath = `"refPath":"#/${refObj[1]}/${refObj[2]}/${refObj[3]}", `
-        return (
-          refPath +
-          JSON.stringify(this.apiDoc[refObj[1]][refObj[2]][refObj[3]]).slice(
-            1,
-            -1
-          ) +
-          str.slice(idxOf2ndDQ + 1)
-        )
-      }
-      const replacedObj = (obj) => {
-        const _string = JSON.stringify(obj)
-          .split(`"$ref":`)
-          .map((str) => (str.startsWith(`"#/`) ? replace(str) : str))
-          .join('')
-        const _obj = JSON.parse(_string)
-        return _string.includes(`"$ref":`) ? replacedObj(_obj) : _obj
-      }
-      return replacedObj(this.apiDoc)
-    },
-    uniqueTags() {
-      const tagsInPathsObject = Object.entries(this.apiDoc.paths)
-        .flatMap((endpoint) => Object.values(endpoint[1]))
-        .flatMap((e) => e.tags)
-      const tagsInTagsObject =
-        'tags' in this.apiDoc ? this.apiDoc.tags.map((e) => e.name) : []
-      // merge and get unique
-      return tagsInTagsObject
-        .concat(tagsInPathsObject)
-        .filter((element, index, array) => array.indexOf(element) === index)
-    },
-    flatPathsObjGroups() {
-      // reformat PathsObj
-      const arrayedPathsObj = Object.entries(
-        this.replacedApiDoc.paths
-      ).map((e) => [e[0], Object.entries(e[1])])
-      const arrOfFlatPathsObj = arrayedPathsObj.flatMap((e) => {
-        return e[1].map((elem) => {
-          return { path: e[0], method: elem[0], opeObj: elem[1] }
-        })
-      })
-      const sortedArrOfFlatPathsObj = [...arrOfFlatPathsObj].sort((a, b) => {
-        const _a = a.path.toString().toLowerCase()
-        const _b = b.path.toString().toLowerCase()
-        return _a < _b ? -1 : 1
-      })
-      // group ApiDoc by UniqueTags
-      return this.uniqueTags.length > 1
-        ? this.uniqueTags.map((tag) => {
-            return {
-              tag,
-              arrOfFlatPathsObj: sortedArrOfFlatPathsObj.filter((element) =>
-                element.opeObj.tags.includes(tag)
-              )
-            }
-          })
-        : [
-            {
-              tag: '',
-              arrOfFlatPathsObj: sortedArrOfFlatPathsObj
-            }
-          ]
-    }
   }
+})
+export default class extends Vue {
+  apiDoc: OpenAPIV3.Document = {
+    openapi: '',
+    info: {
+      title: '',
+      version: ''
+    },
+    paths: {},
+    tags: [{ name: '' }]
+  }
+  // get replacedApiDoc() {
+  //   const replace = (str: String) => {
+  //     // DQ means DoubleQuotation
+  //     const idxOf2ndDQ = str.indexOf(`"`, 1)
+  //     const refObj = str.slice(1, idxOf2ndDQ).split('/')
+  //     const refPath = `"refPath":"#/${refObj[1]}/${refObj[2]}/${refObj[3]}", `
+  //     return (
+  //       refPath +
+  //       JSON.stringify(this.apiDoc[refObj[1]][refObj[2]][refObj[3]]).slice(
+  //         1,
+  //         -1
+  //       ) +
+  //       str.slice(idxOf2ndDQ + 1)
+  //     )
+  //   }
+  //   const replacedObj = (obj) => {
+  //     const _string = JSON.stringify(obj)
+  //       .split(`"$ref":`)
+  //       .map((str) => (str.startsWith(`"#/`) ? replace(str) : str))
+  //       .join('')
+  //     const _obj = JSON.parse(_string)
+  //     return _string.includes(`"$ref":`) ? replacedObj(_obj) : _obj
+  //   }
+  //   return replacedObj(this.apiDoc)
+  // },
+  // get uniqueTags() {
+  //   const tagsInPathsObject = Object.entries(this.apiDoc.paths)
+  //     .flatMap((endpoint) => Object.values(endpoint[1]))
+  //     .flatMap((e) => e.tags)
+  //   const tagsInTagsObject =
+  //     'tags' in this.apiDoc ? this.apiDoc.tags.map((e) => e.name) : []
+  //   // merge and get unique
+  //   return tagsInTagsObject
+  //     .concat(tagsInPathsObject)
+  //     .filter((element, index, array) => array.indexOf(element) === index)
+  // },
+  // get flatPathsObjGroups(): FlatPathsObjGroup[] {
+  //   // reformat PathsObj
+  //   const arrayedPathsObj = Object.entries(
+  //     this.apiDoc.paths
+  //   //  this.replacedApiDoc.paths
+  //   ).map((e) => [e[0], Object.entries(e[1])])
+  //   const arrOfFlatPathsObj = arrayedPathsObj.flatMap((e) => {
+  //     return e[1].map((elem) => {
+  //       return { path: e[0], method: elem[0], opeObj: elem[1] }
+  //     })
+  //   })
+  //   const sortedArrOfFlatPathsObj = [...arrOfFlatPathsObj].sort((a, b) => {
+  //     const _a = a.path.toString().toLowerCase()
+  //     const _b = b.path.toString().toLowerCase()
+  //     return _a < _b ? -1 : 1
+  //   })
+  //   // group ApiDoc by UniqueTags
+  //   return this.uniqueTags.length > 1
+  //     ? this.uniqueTags.map((tag) => {
+  //         return {
+  //           tag,
+  //           arrOfFlatPathsObj: sortedArrOfFlatPathsObj.filter((element) =>
+  //             element.opeObj.tags.includes(tag)
+  //           )
+  //         }
+  //       })
+  //     : [
+  //         {
+  //           tag: '',
+  //           arrOfFlatPathsObj: sortedArrOfFlatPathsObj
+  //         }
+  //       ]
+  // }
 }
 </script>
 <style scoped>
