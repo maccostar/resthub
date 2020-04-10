@@ -105,9 +105,19 @@ export default {
     },
     flatPathsObjGroups() {
       // reformat PathsObj
-      const arrayedPathsObj = Object.entries(
-        this.replacedApiDoc.paths
-      ).map((e) => [e[0], Object.entries(e[1])])
+      const methods = [
+        'get',
+        'put',
+        'post',
+        'delete',
+        'options',
+        'head',
+        'patch',
+        'trace'
+      ]
+      const arrayedPathsObj = Object.entries(this.replacedApiDoc.paths)
+        .map((e) => [e[0], Object.entries(e[1])])
+        .filter((e) => methods.includes(e[1][0]))
       const arrOfFlatPathsObj = arrayedPathsObj.flatMap((e) => {
         return e[1].map((elem) => {
           return { path: e[0], method: elem[0], opeObj: elem[1] }
