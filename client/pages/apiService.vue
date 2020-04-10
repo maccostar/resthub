@@ -93,9 +93,13 @@ export default {
       return replacedObj(this.apiDoc)
     },
     uniqueTags() {
-      const tagsInPathsObject = Object.entries(this.apiDoc.paths)
-        .flatMap((endpoint) => Object.values(endpoint[1]))
-        .flatMap((e) => e.tags)
+      const tagsInPathsObject = Object.entries(this.apiDoc.paths).flatMap(
+        (endpoint) => {
+          return Object.entries(endpoint[1])
+            .filter((elem) => this.isMethod(elem[0]))
+            .flatMap((elem) => elem[1].tags)
+        }
+      )
       const tagsInTagsObject =
         'tags' in this.apiDoc ? this.apiDoc.tags.map((e) => e.name) : []
       // merge and get unique
@@ -105,19 +109,9 @@ export default {
     },
     flatPathsObjGroups() {
       // reformat PathsObj
-      const methods = [
-        'get',
-        'put',
-        'post',
-        'delete',
-        'options',
-        'head',
-        'patch',
-        'trace'
-      ]
       const arrayedPathsObj = Object.entries(this.replacedApiDoc.paths)
         .map((e) => [e[0], Object.entries(e[1])])
-        .filter((e) => methods.includes(e[1][0][0]))
+        .filter((e) => this.isMethod(e[1][0][0]))
       const arrOfFlatPathsObj = arrayedPathsObj.flatMap((e) => {
         return e[1].map((elem) => {
           return { path: e[0], method: elem[0], opeObj: elem[1] }
@@ -134,7 +128,9 @@ export default {
             return {
               tag,
               arrOfFlatPathsObj: sortedArrOfFlatPathsObj.filter((element) =>
-                element.opeObj.tags.includes(tag)
+                'tags' in element.opeObj
+                  ? element.opeObj.tags.includes(tag)
+                  : false
               )
             }
           })
@@ -144,6 +140,21 @@ export default {
               arrOfFlatPathsObj: sortedArrOfFlatPathsObj
             }
           ]
+    }
+  },
+  methods: {
+    isMethod: (str) => {
+      const methods = [
+        'get',
+        'put',
+        'post',
+        'delete',
+        'options',
+        'head',
+        'patch',
+        'trace'
+      ]
+      return methods.includes(str)
     }
   }
 }
