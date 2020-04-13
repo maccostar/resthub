@@ -37,6 +37,7 @@
         :num="filterdApiList.length"
         :page="pageNumber"
         @input="onReceivePage"
+        @click="$vuetify.goTo(0)"
       />
     </div>
   </div>
@@ -101,6 +102,7 @@ export default class extends Vue {
 
   onReceivePage(page: number) {
     this.pageNumber = page
+    this.$vuetify.goTo(0)
   }
 
   initializeApiList() {
