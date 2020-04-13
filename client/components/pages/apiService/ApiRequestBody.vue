@@ -22,7 +22,7 @@
   </div>
 </template>
 <script>
-import schemaObj from '~/components/apiService/SchemaObj.vue'
+import schemaObj from '~/components/pages/apiService/SchemaObj.vue'
 export default {
   components: {
     schemaObj

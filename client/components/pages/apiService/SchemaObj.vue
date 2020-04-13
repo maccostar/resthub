@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import SchemaObj from '~/components/apiService/SchemaObj.vue'
+import SchemaObj from '~/components/pages/apiService/SchemaObj.vue'
 
 export default {
   name: 'SchemaObj',

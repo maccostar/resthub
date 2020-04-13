@@ -43,8 +43,8 @@
 <script>
 // This script don't use TypeScript temporarily.
 import SwaggerParser from 'swagger-parser'
-import ApiSideBar from '~/components/apiService/ApiSideBar.vue'
-import ApiMethod from '~/components/apiService/ApiMethod.vue'
+import ApiSideBar from '~/components/pages/apiService/ApiSideBar.vue'
+import ApiMethod from '~/components/pages/apiService/ApiMethod.vue'
 
 export default {
   components: {

@@ -45,10 +45,10 @@
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
 import { Api } from '~/apis/apilist.json'
-import Pagination from '~/components/Pagination.vue'
-import Card from '~/components/Card.vue'
-import SideBar from '~/components/SideBar.vue'
-import SearchBar from '~/components/SearchBar.vue'
+import Pagination from '~/components/pages/index/Pagination.vue'
+import Card from '~/components/pages/index/Card.vue'
+import SideBar from '~/components/pages/index/SideBar.vue'
+import SearchBar from '~/components/pages/index/SearchBar.vue'
 
 const PAGE_ITEM_NUMBER = 10
 
