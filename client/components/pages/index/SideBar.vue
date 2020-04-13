@@ -52,6 +52,7 @@ export default class extends Vue {
   width: 200px;
   height: 100%;
   padding: 30px 20px;
+  overflow-y: scroll;
   background: #fff;
   border-right: thin solid #c0c0c0;
 }
