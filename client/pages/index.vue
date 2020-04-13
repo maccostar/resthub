@@ -37,7 +37,6 @@
         :num="filterdApiList.length"
         :page="pageNumber"
         @input="onReceivePage"
-        @click="$vuetify.goTo(0)"
       />
     </div>
   </div>
