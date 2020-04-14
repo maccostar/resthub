@@ -80,7 +80,8 @@ const config: Configuration = {
     treeShake: true
   },
   markdownit: {
-    injected: true
+    injected: true,
+    html: true
   },
   /*
    ** Build configuration
