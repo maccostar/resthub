@@ -1,13 +1,13 @@
 <template>
   <div class="api-side-bar">
-    <v-text-field
+    <!-- <v-text-field
       label="Keywords"
       class="search-bar"
       prepend-inner-icon="mdi-magnify"
       single-line
       outlined
       dense
-    />
+    /> -->
     <v-list dense>
       <v-list-item>
         <v-list-item-title>Info</v-list-item-title>
