@@ -27,7 +27,7 @@
         >
           <nuxt-link
             class="link"
-            :to="`/apiService?apiServiceId=${api.apiServiceId}`"
+            :to="`/apiService/?apiServiceId=${api.apiServiceId}`"
           >
             <Card :api="api" />
           </nuxt-link>
