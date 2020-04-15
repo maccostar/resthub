@@ -1,6 +1,6 @@
 <template>
   <div class="api-container">
-    <div class="api-title">
+    <div class="api-title" @click="isOpened = !isOpened">
       <h5 v-if="flatPathsObj.method" :class="[flatPathsObj.method, 'method']">
         <p style="color: #fff;">{{ flatPathsObj.method }}</p>
       </h5>
@@ -11,7 +11,7 @@
         {{ flatPathsObj.opeObj.summary }}
       </p>
     </div>
-    <div class="api-detail">
+    <div v-if="isOpened" class="api-detail">
       <div
         v-if="existsKey(flatPathsObj.opeObj, 'description')"
         class="description"
@@ -95,6 +95,11 @@ export default {
     appTitle: {
       type: String,
       required: true
+    }
+  },
+  data() {
+    return {
+      isOpened: false
     }
   },
   computed: {
