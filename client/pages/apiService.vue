@@ -32,7 +32,6 @@
             :id="`${gIndex}_${idx}`"
             :key="idx"
           >
-            <span class="heading" />
             <api-method :flat-paths-obj="obj" :app-title="apiDoc.info.title" />
           </div>
         </div>
@@ -179,12 +178,5 @@ h2 {
 }
 h3 {
   font-size: 24px;
-}
-.heading::before {
-  display: block;
-  height: 6rem;
-  margin-top: -6rem;
-  visibility: hidden;
-  content: '';
 }
 </style>
